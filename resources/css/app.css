@@ -10,8 +10,16 @@
 @theme {
     --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-        "Noto Color Emoji";
+        "Noto Color Emoji";    
 }
+
+@font-face {
+    font-family: 'Baloo';
+    src: url('/fonts/Baloo-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 
 @layer base {
     :root {
@@ -23,9 +31,13 @@
     html {
         scroll-behavior: smooth;
     }
+
+    body {
+        font-family: 'Baloo', sans-serif;
+    }
 }
 
-@layer utilities {
+@layer utilities {    
     .bg-primary {
         background-color: var(--color-primary);
     }

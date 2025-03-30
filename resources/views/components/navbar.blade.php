@@ -1,6 +1,6 @@
 <nav class="bg-primary flex justify-between items-center px-8 py-4 text-white">
     <div>
-        <a href="{{ url('/') }}" class="flex flex-col text-3xl text-white font-bold hover-underline">
+        <a href="{{ url('/') }}" class="flex flex-col text-3xl text-white hover-underline">
             PetPal <span class="text-sm">Find.Love.Adopt</span>
         </a>
     </div>
@@ -47,8 +47,8 @@
                 </div>
             </div>
         @else
-            <a href="{{ route('register') }}" class="hover-underline">Register</a>
             <a href="{{ route('login') }}" class="hover-underline">Login</a>
+            <a href="{{ route('register') }}" class="hover-underline">Register</a>
         @endauth
     </div>
 </nav>

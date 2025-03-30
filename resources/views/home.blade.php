@@ -21,6 +21,6 @@
             @endif
         </div>
 
-        <h1 class="text-4xl text-dark font-bold capitalize">Let us feel what <span class="text-primary">unconditional love</span> is</h1>
+        <h1 class="text-4xl text-dark capitalize">Let us feel what <span class="text-primary">unconditional love</span> is</h1>
     </div>
 @endsection

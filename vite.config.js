@@ -10,4 +10,6 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+
+    publicDir: 'public',
 });
