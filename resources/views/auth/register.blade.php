@@ -29,7 +29,7 @@
                             class="{{ $inputClasses }}">
                         <label class="{{ $labelClasses }}"> {{ $label }}</label>
 
-                        <p class="text-primary text-sm min-h-[20px]">
+                        <p class="text-secondary text-sm min-h-[20px]">
                             @error($name)
                                 {{ $message }}
                             @enderror

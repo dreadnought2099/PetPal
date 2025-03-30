@@ -9,7 +9,7 @@
 
             <div class="h-[30px] flex items-center justify-center">
                 @if (session('error'))
-                    <div class="bg-red-100 border-l-4 border-primary text-primary p-3 rounded-md">
+                    <div class="bg-red-100 border-l-4 border-secondary text-secondary p-3 rounded-md">
                         {{ session('error') }}
                     </div>
                 @elseif (session('success'))

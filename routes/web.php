@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdoptionController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\RecordController;
 use Illuminate\Support\Facades\Route;
@@ -9,6 +11,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\PetController;
 use Illuminate\Auth\Notifications\ResetPassword;
 
 Route::get('/', function () {
@@ -42,6 +45,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/email/verify', [VerificationController::class, 'notice'])->name('verification.notice');
     Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->middleware('signed')->name('verification.verify');
     Route::post('/email/resend', [VerificationController::class, 'resend'])->middleware('throttle:6,1')->name('verification.resend');
+
+    // Adopter routes
+    Route::get('/adopt', [AdoptionController::class, 'index'])->name('adopt.index');
+    Route::post('/adopt/request', [AdoptionController::class, 'store'])->name('adopt.store');
 });
 
 // Logout outside the verified middleware so user can still logout even the email is unverified
@@ -63,8 +70,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/{record}/edit', [RecordController::class, 'edit'])->name('records.edit');
             Route::put('/{record}', [RecordController::class, 'update'])->name('records.update');
             Route::delete('/{record}', [RecordController::class, 'destroy'])->name('records.destroy');
+
+            Route::get('admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+            Route::delete('/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
+            Route::put('/users/{id}/role', [AdminController::class, 'changeRole'])->name('admin.changeRole');
+            Route::delete('/adopt/{id}', [AdminController::class, 'deleteRequest'])->name('admin.deleteRequest');
         });
     });
 
     
 });
+
+// Shelter routes
+Route::middleware(['auth', 'role:shelter'])->group(function () {
+    Route::get('pets', [PetController::class, 'index'])->name('pets.index');
+    Route::get('/pets/create', [PetController::class,  'create'])->name('pets.create');
+    Route::post('/pets', [PetController::class, 'store'])->name('pet.store');
+    Route::get('/pets/{id}/edit', [PetController::class, 'edit'])->name('pets.edit');
+    Route::put('/pets{id}', [PetController::class, 'update'])->name('pets.update');
+});
+

@@ -24,6 +24,7 @@
 @layer base {
     :root {
         --color-primary: #49b451;
+        --color-secondary: #a31621;
         --color-dark: #212121;
         /* -color-hover: #9f444c; */
     }
@@ -50,8 +51,16 @@
         color: var(--color-primary);
     }
 
+    .text-secondary {
+        color: var(--color-secondary);
+    }
+
     .border-primary {
         border-color: var(--color-primary);
+    }
+
+    .border-secondary {
+        border-color: var(--color-secondary);
     }
 
     .border-dark {
@@ -76,16 +85,17 @@
     }
 
   
-    /* For Focusing | Input Types */
-    .focus\:ring-primary:focus {
-        --tw-ring-color: var(--color-primary); /* Set ring color */
-        box-shadow: 0 0 0 1px var(--tw-ring-color); /* Add ring effect */
-    }
+    .focus\:ring-primary:focus { 
+        --tw-ring-color: var(--color-primary);
+        box-shadow: 0 0 0 1px var(--tw-ring-color); 
+    } 
+
 
     .focus\:border-primary:focus {
         border-color: var(--color-primary);
     }
 
+   
     .peer:focus ~ label {
         color: var(--color-primary);
     }

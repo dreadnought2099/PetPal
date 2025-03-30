@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
+use Spatie\Permission\Models\Role;
 
 class RegistrationController extends Controller
 {
@@ -46,6 +47,8 @@ class RegistrationController extends Controller
 
             // Ma login ang user after successfully registering
             Auth::login($user);
+
+            $user->assignRole('adopter');
 
             return redirect()->route('records.index')->with('success', "Registration successful! Welcome, {$user->name}."); 
         } catch (\Exception $e) {
