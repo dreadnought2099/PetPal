@@ -3,7 +3,6 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdoptionController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\RecordController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegistrationController;
@@ -20,6 +19,12 @@ Route::get('/', function () {
 
 Auth::routes(['verify' => true]);
 
+// Logout outside the verified middleware so user can still logout even the email is unverified
+Route::middleware('auth')->post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// Profile outisde the verified middleware so user can still access profile page even the email is unverified
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
@@ -30,14 +35,16 @@ Route::middleware('guest')->group(function () {
     // Shows the forgot password form
     Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
 
-     // Handle sending reset password email
+    // Handle sending reset password email
     Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 
-     // Shows reset password form
+    // Shows reset password form
     Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 
     // Handle password reset
     Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+
+    Route::get('/pets', [PetController::class, 'index'])->name('pets.index');
 });
 
 // For verifying the email registered
@@ -45,48 +52,39 @@ Route::middleware('auth')->group(function () {
     Route::get('/email/verify', [VerificationController::class, 'notice'])->name('verification.notice');
     Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->middleware('signed')->name('verification.verify');
     Route::post('/email/resend', [VerificationController::class, 'resend'])->middleware('throttle:6,1')->name('verification.resend');
-
-    // Adopter routes
-    Route::get('/adopt', [AdoptionController::class, 'index'])->name('adopt.index');
-    Route::post('/adopt/request', [AdoptionController::class, 'store'])->name('adopt.store');
 });
 
-// Logout outside the verified middleware so user can still logout even the email is unverified
-Route::middleware('auth')->post('/logout', [LoginController::class, 'logout'])->name('logout');
-
-// Profile outisde the verified middleware so user can still access profile page even the email is unverified
-Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    // Record routes
-    Route::prefix('records')->group(function () {
-        Route::get('/', [RecordController::class, 'index'])->name('records.index');
-        Route::get('/add', [RecordController::class, 'create'])->name('records.create');
-        Route::post('/', [RecordController::class, 'store'])->name('records.store');
+    // Administrator
+    Route::middleware(['role:Administrator'])->group(function () {
+        Route::get('admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
-        // Administrator
-        Route::middleware(['role:Administrator'])->group(function () {
-            Route::get('/{record}/edit', [RecordController::class, 'edit'])->name('records.edit');
-            Route::put('/{record}', [RecordController::class, 'update'])->name('records.update');
-            Route::delete('/{record}', [RecordController::class, 'destroy'])->name('records.destroy');
-
-            Route::get('admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-            Route::delete('/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
-            Route::put('/users/{id}/role', [AdminController::class, 'changeRole'])->name('admin.changeRole');
-            Route::delete('/adopt/{id}', [AdminController::class, 'deleteRequest'])->name('admin.deleteRequest');
-        });
+        // User Management
+        Route::delete('/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
+        Route::put('/users/{id}/role', [AdminController::class, 'changeRole'])->name('admin.changeRole');
     });
 
-    
-});
+    // Shelter & Administrator
+    Route::middleware(['role:Shelter|Administrator'])->group(function () {
 
-// Shelter routes
-Route::middleware(['auth', 'role:shelter'])->group(function () {
-    Route::get('pets', [PetController::class, 'index'])->name('pets.index');
-    Route::get('/pets/create', [PetController::class,  'create'])->name('pets.create');
-    Route::post('/pets', [PetController::class, 'store'])->name('pet.store');
-    Route::get('/pets/{id}/edit', [PetController::class, 'edit'])->name('pets.edit');
-    Route::put('/pets{id}', [PetController::class, 'update'])->name('pets.update');
-});
+        Route::get('/pets/create', [PetController::class,  'create'])->name('pets.create');
+        Route::post('/pets', [PetController::class, 'store'])->name('pets.store');
+        Route::get('/pets/{id}/edit', [PetController::class, 'edit'])->name('pets.edit');
+        Route::put('/pets/{id}', [PetController::class, 'update'])->name('pets.update');
 
+        // Adoption Request Management
+        Route::patch('/adopt/{adoption}/approve', [AdoptionController::class, 'approve'])->name('adopt.approve');
+        Route::patch('/adopt/{adoption}/reject', [AdoptionController::class, 'reject'])->name('adopt.reject');
+        Route::delete('/adopt/{adoption}', [AdoptionController::class, 'destroy'])->name('adopt.destroy'); 
+    });
+
+    // Adopter
+    Route::middleware(['auth', 'role:Adopter'])->group(function () {
+
+        Route::get('/adopt', [AdoptionController::class, 'index'])->name('adopt.index');
+        Route::post('/adopt/request', [AdoptionController::class, 'store'])->name('adopt.store');
+        Route::get('/adopt/log', [AdoptionController::class, 'adoptionLog'])->name('adopt.log');
+    });
+});

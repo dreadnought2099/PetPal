@@ -7,10 +7,15 @@
 
     <div class="flex items-center space-x-6 text-lg font-bold">
         <a href="{{ url('/') }}" class="hover-underline">Home</a>
-        <a href="{{ route('records.index') }}" class="hover-underline">Records</a>
-        <a href="{{ route('records.create') }}" class="hover-underline">Add Record</a>
+        <a href="{{ url('/pets') }}" class="hover-underline">Our Pets</a>
+        @if (auth()->check() && auth()->user()->hasRole('Shelter|Administrator'))
+            <a href="{{ route('pets.create') }}" class="hover-underline">Add Pet</a>
+        @endif
 
         @auth
+            @if(auth()->user()->hasRole('Adopter'))
+                <a href="{{ route('adopt.index') }}" class="hover-underline">Apply for Adoption</a>
+            @endif
 
             <div x-data="{ open: false }" class="relative">
                 <!-- Dropdown Button -->
@@ -29,8 +34,16 @@
                     <ul class="py-2">
                         <li>
                             <a href="{{ route('profile.index') }}"
-                                class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
+                                class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile
+                            </a>
                         </li>
+                        @if (auth()->check() && auth()->user()->hasRole('Adopter'))
+                            <li>
+                                <a href="{{ route('adopt.log') }}" 
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Adoption Log
+                                </a>
+                            </li>
+                        @endif
                         <li>
                             <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Settings</a>
                         </li>

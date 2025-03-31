@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use App\Models\Adoption;
 
 class AdminController extends Controller
 {
@@ -15,7 +16,7 @@ class AdminController extends Controller
     public function deleteUser($id) {
         
         $user = User::findOrFail($id);
-        $user->delete;
+        $user->delete();
 
         return back()->with('success', 'User deleted successfully');
     }
@@ -32,7 +33,7 @@ class AdminController extends Controller
 
     public function deleteRequest($id) {
 
-        $adoption = AdoptionRequest::findOrFail($id);
+        $adoption = Adoption::findOrFail($id);
         $adoption->delete();
 
         return back()->with('success', 'Adoption request deleted');

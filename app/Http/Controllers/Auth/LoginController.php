@@ -28,7 +28,7 @@ class LoginController extends Controller
         $user = Auth::user();
 
         // success message
-        return redirect()->route('records.index')->with('success', "Login successful! Welcome, {$user->name}.");
+        return redirect()->route('pets.index')->with('success', "Login successful! Welcome, {$user->name}.");
     }
 
     protected function authenticated(Request $request, $user) {

@@ -14,13 +14,13 @@ class PetController extends Controller
     {
 
         $pets = Pet::all();
-        return view('pets.index', compact('pets'));
+        return view('pages.pets.index', compact('pets'));
     }
 
     public function create()
     {
 
-        return view('pets.create');
+        return view('pages.pets.create');
     }
 
     public function store(Request $request)
@@ -33,24 +33,26 @@ class PetController extends Controller
             'allergies' => 'nullable|string',
             'profile' => 'nullable|image|max:51200',
             'sex' => 'sometimes|in:M,F',
-            'species' => 'sometimes|in:Dog,Cat',
-            'vaccination' => 'required|in:None,Partially,Fully',
+            'species' => 'sometimes|integer|in:0,1',
+            'vaccination' => 'required|integer|in:0,1,3',
             'spayed_neutered' => 'sometimes|boolean',
         ]);
         // Generate filename using the SUBMITTED name (not DB)
         if ($request->hasFile('profile')) {
             $file = $request->file('profile');
             $cleanPetName = Str::slug($validated['name']); // "Fluffy Cat!" -> "fluffy-cat"
-            $filename = $cleanPetName . '-' . time() . '-' . $file->extension(); // "fluffy-cat-16987654
+            $filename = $cleanPetName . '-' . time() . '-' . $file->getClientOriginalExtension(); // "fluffy-cat-16987654
             $path = $file->storeAs('pets/profile_photos', $filename, 'public');
-            $validated['pet_profile-path'] = $path; // Save path to DB
+            $validated['pet_profile_path'] = $path; // Save path to DB
         }
 
+        $validated['user_id'] = auth()->id();
+        
         try {
             $pet = Pet::create($validated);
-            return redirect()->route('pets.index')->with('success', "Pet {$pet->name} was added successfully.");
+            return redirect()->route('pages.pets.index')->with('success', "Pet {$pet->name} was added successfully.");
         } catch (Exception $e) {
-            return redirect()->route('pets.index')->with('error', 'Failed to add pet: '. $e->getMessage());
+            return redirect()->route('pages.pets.index')->with('error', 'Failed to add pet: '. $e->getMessage());
 
         }
        
