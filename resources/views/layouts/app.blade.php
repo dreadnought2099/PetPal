@@ -8,6 +8,20 @@
     @vite('resources/css/app.css')
     <link rel="icon" href="{{ asset('/icon/pawprint.png') }}">
     <title>PetPal</title>
+    <style>
+        #petModal {
+            background-color: black;
+            opacity: 80%;
+            transition: background-color 0.3s ease;
+        }
+
+        /* When modal is opened, apply darker background */
+        #petModal.open {
+            background-color: black;
+            opacity: 80%;
+            transition: background-color 0.3s ease;
+        }
+    </style>
 </head>
 
 <body class="overflow-hidden">
