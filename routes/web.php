@@ -24,6 +24,8 @@ Route::middleware('auth')->post('/logout', [LoginController::class, 'logout'])->
 
 // Profile outisde the verified middleware so user can still access profile page even the email is unverified
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+Route::get('/pets', [PetController::class, 'index'])->name('pets.index');
+
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -43,8 +45,6 @@ Route::middleware('guest')->group(function () {
 
     // Handle password reset
     Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
-
-    Route::get('/pets', [PetController::class, 'index'])->name('pets.index');
 });
 
 // For verifying the email registered

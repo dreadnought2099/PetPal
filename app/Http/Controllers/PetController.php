@@ -31,6 +31,7 @@ class PetController extends Controller
             'age' => 'required|integer|min:0|max:50',
             'breed' => 'required|string|max:100',
             'allergies' => 'nullable|string',
+            'description' => 'nullable|string',
             'profile' => 'nullable|image|max:51200',
             'sex' => 'sometimes|in:M,F',
             'species' => 'sometimes|integer|in:0,1',
@@ -50,9 +51,9 @@ class PetController extends Controller
         
         try {
             $pet = Pet::create($validated);
-            return redirect()->route('pages.pets.index')->with('success', "Pet {$pet->name} was added successfully.");
+            return redirect()->route('pets.index')->with('success', "Pet {$pet->name} was added successfully.");
         } catch (Exception $e) {
-            return redirect()->route('pages.pets.index')->with('error', 'Failed to add pet: '. $e->getMessage());
+            return redirect()->route('pets.index')->with('error', 'Failed to add pet: '. $e->getMessage());
 
         }
        

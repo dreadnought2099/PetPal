@@ -30,7 +30,7 @@
             <label class="block font-semibold">Pet's Name</label>
             <input type="text" name="name" class="w-full p-2 border rounded mb-4" required>
 
-            <label class="block font-semibold">Age (in months/years)</label>
+            <label class="block font-semibold">Age (in years)</label>
             <input type="number" name="age" class="w-full p-2 border rounded mb-4" required>
 
             <label class="block font-semibold">Breed</label>
@@ -38,6 +38,9 @@
 
             <label class="block font-semibold">Enter Known Allergies (or type "None")</label>
             <input type="text" name="allergies" class="w-full p-2 border rounded mb-4" required>
+
+            <label class="block font-semibold">Description</label>
+            <textarea name="description" cols="10" rows="5" class="w-full p-2 border rounded mb-4" placeholder="Write a short description about the pet..."></textarea>
 
             <label class="block font-semibold">Pet Profile (Upload Image)</label>
             <input type="file" name="profile" class="w-full p-2 border rounded mb-4" accept="image/*">

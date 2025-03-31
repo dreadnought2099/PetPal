@@ -26,6 +26,7 @@ class Pet extends Model
         'age',
         'breed',
         'allergies',
+        'description',
         'pet_profile_path',
         'sex',
         'species', // Uses Constants
