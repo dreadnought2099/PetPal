@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Adoption;
+use App\Models\Pet;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,11 +20,12 @@ class AdoptionController extends Controller
     }
 
     public function store(Request $request)
-    {   
+    {
         Log::info('Adoption Request Data:', $request->all());
-        
+
         try {
             $validated = $request->validate([
+                'pet_id' => 'required|exists:pets,id',
                 'last_name' => 'required|string|max:255',
                 'first_name' => 'required|string|max:255',
                 'middle_name' => 'nullable|string|max:255',
@@ -51,7 +53,6 @@ class AdoptionController extends Controller
             ]);
 
             return redirect()->route('adopt.index')->with('success', "Adoption request (ID: {$adoptionRequest->id}) submitted successfully!");
-
         } catch (\Exception $e) {
             Log::error("Adoption Request Error: " . $e->getMessage());
             return back()->with('error', 'Failed to submit adoption request. Please try again.');
@@ -82,16 +83,26 @@ class AdoptionController extends Controller
         return back()->with('success', 'Adoption request deleted.');
     }
 
-    public function adoptionLog() {
-        
+    public function adoptionLog()
+    {
+
         $user = Auth::user();
 
         if ($user->hasRole('Adopter')) {
-             $adoptions = Adoption::where('user_id', $user->id)->get();
+            $adoptions = Adoption::where('user_id', $user->id)->get();
         } else {
-             $adoptions = Adoption::all();
+            $adoptions = Adoption::all();
         }
- 
+
         return view('pages.adoptions.adoption-log', compact('adoptions'));
+    }
+
+    public function create(Request $request)
+    {
+        $selectedPet = $request->has('pet_id') ? Pet::find($request->query('pet_id')) : null;
+        $pets = Pet::all(); // Fetch all available pets
+
+        // Pass both selectedPet and pets to the view
+        return view('pages.adoptions.index', compact('pets', 'selectedPet'));
     }
 }

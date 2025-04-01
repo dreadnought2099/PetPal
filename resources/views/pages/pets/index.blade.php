@@ -9,21 +9,27 @@
         @foreach ($pets as $pet)
             <!-- Pet Card -->
             <div class="bg-white p-4 rounded-lg shadow-md">
-                <img src="{{ $pet->pet_profile_path ? asset('storage/'.$pet->pet_profile_path) : asset('images/LRM_20240517_192913-01.jpeg') }}" alt="{{ $pet->name }}" class="w-full h-48 object-cover rounded-lg">
+                <img src="{{ $pet->pet_profile_path ? asset('storage/' . $pet->pet_profile_path) : asset('images/LRM_20240517_192913-01.jpeg') }}"
+                    alt="{{ $pet->name }}" class="w-full h-48 object-cover rounded-lg">
                 <h3 class="text-xl font-bold mt-4">{{ $pet->name }}</h3>
                 <p class="text-gray-600">{{ $pet->breed }}</p>
-                
+
                 <!-- Open Modal Button -->
-                <button onclick="openModal({{ json_encode($pet) }})" class="mt-4 text-blue-500 hover:underline">See more</button>
+                <button onclick='openModal(@json($pet))' class="mt-4 text-blue-500 hover:underline">See
+                    more</button>
             </div>
         @endforeach
     </div>
 
-    <!-- Pet Details Modal -->
-    <div id="petModal" class="fixed inset-0 flex items-center justify-center backdrop-blur-sm hidden">
+    <!-- 🔹 Modal Overlay (Blur Background) -->
+    <div id="petModalOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden"></div>
+
+    <!-- 🔹 Pet Details Modal -->
+    <div id="petModal" class="fixed inset-0 flex items-center justify-center hidden z-50">
         <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-lg relative">
             <!-- Close Button -->
-            <button onclick="closeModal()" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-2xl">&times;</button>
+            <button onclick="closeModal()"
+                class="absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-2xl">&times;</button>
 
             <!-- Pet Image -->
             <img id="petImage" src="" alt="Pet Image" class="w-full h-48 object-cover rounded-lg mb-4">
@@ -45,14 +51,19 @@
             <!-- Buttons -->
             <div class="flex justify-between mt-4">
                 <button onclick="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Close</button>
-                <a id="adoptNowBtn" href="#" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">Adopt Now</a>
+                @if (auth()->check() && auth()->user()->hasRole('Adopter'))
+                    <a id="adoptNowBtn" href="{{ route('adoption.apply', ['pet_id' => $pet->id]) }}"
+                        class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">Adopt Now
+                    </a>
+                @endif
             </div>
         </div>
     </div>
 
-    <!-- JavaScript to Handle Modal -->
+    <!-- 🔹 JavaScript to Handle Modal -->
     <script>
         function openModal(pet) {
+            // Set modal content
             document.getElementById('petName').innerText = pet.name;
             document.getElementById('petBreed').innerText = pet.breed;
             document.getElementById('petAge').innerText = pet.age;
@@ -65,16 +76,24 @@
 
             // Set pet image
             let petImage = document.getElementById('petImage');
-            petImage.src = pet.pet_profile_path ? `/storage/${pet.pet_profile_path}` : '/images/LRM_20240517_192913-01.jpeg';
+            petImage.src = pet.pet_profile_path ? `/storage/${pet.pet_profile_path}` :
+                '/images/LRM_20240517_192913-01.jpeg';
 
-            // Set adoption link
-            document.getElementById('adoptNowBtn').href = `/adoption/apply/${pet.id}`;
+            // Set adoption link (passing pet_id)
+            let adoptNowBtn = document.getElementById('adoptNowBtn');
+            if (adoptNowBtn) {
+                adoptNowBtn.href = `/adoption/apply?pet_id=${pet.id}`;
+            } else {
+                console.warn("Adopt Now button not found.");
+            }
 
-            // Show modal
+            // Show modal & overlay
+            document.getElementById('petModalOverlay').classList.remove('hidden');
             document.getElementById('petModal').classList.remove('hidden');
         }
 
         function closeModal() {
+            document.getElementById('petModalOverlay').classList.add('hidden');
             document.getElementById('petModal').classList.add('hidden');
         }
     </script>

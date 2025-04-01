@@ -86,5 +86,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/adopt', [AdoptionController::class, 'index'])->name('adopt.index');
         Route::post('/adopt/request', [AdoptionController::class, 'store'])->name('adopt.store');
         Route::get('/adopt/log', [AdoptionController::class, 'adoptionLog'])->name('adopt.log');
+        Route::get('/adoption/apply', [AdoptionController::class, 'create'])->name('adoption.apply');
     });
 });
