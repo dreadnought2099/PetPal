@@ -25,7 +25,6 @@ Route::middleware('auth')->post('/logout', [LoginController::class, 'logout'])->
 
 // Profile outisde the verified middleware so user can still access profile page even the email is unverified
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
 
 Route::get('/pets', [PetController::class, 'index'])->name('pets.index');
 
@@ -60,6 +59,9 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+
+
     // Administrator
     Route::middleware(['role:Administrator'])->group(function () {
         Route::get('admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
@@ -80,7 +82,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Adoption Request Management
         Route::patch('/adopt/{adoption}/approve', [AdoptionController::class, 'approve'])->name('adopt.approve');
         Route::patch('/adopt/{adoption}/reject', [AdoptionController::class, 'reject'])->name('adopt.reject');
-        Route::delete('/adopt/{adoption}', [AdoptionController::class, 'destroy'])->name('adopt.destroy'); 
     });
 
     // Adopter
@@ -89,6 +90,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/adopt', [AdoptionController::class, 'index'])->name('adopt.index');
         Route::post('/adopt/request', [AdoptionController::class, 'store'])->name('adopt.store');
         Route::get('/adopt/log', [AdoptionController::class, 'adoptionLog'])->name('adopt.log');
-        Route::get('/adoption/create', [AdoptionController::class, 'create'])->name('adoption.create');
+        Route::get('/adoption/apply', [AdoptionController::class, 'create'])->name('adoption.apply');
+        Route::put('/adopt/{adoption}', [AdoptionController::class, 'update'])->name('adopt.update'); 
+        Route::get('/adopt/{adoption}/edit', [AdoptionController::class, 'edit'])->name('adopt.edit');
+        Route::delete('/adopt/{adoption}', [AdoptionController::class, 'destroy'])->name('adopt.destroy'); 
     });
 });

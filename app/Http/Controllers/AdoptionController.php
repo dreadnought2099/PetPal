@@ -20,6 +20,7 @@ class AdoptionController extends Controller
         return view('pages.adoptions.index', compact('adoptions', 'pets'));
     }
 
+
     public function store(Request $request)
     {
         Log::info('Adoption Request Data:', $request->all());
@@ -60,6 +61,7 @@ class AdoptionController extends Controller
         }
     }
 
+
     public function approve(Adoption $adoption)
     {
         $this->authorize('approve', $adoption);
@@ -67,6 +69,7 @@ class AdoptionController extends Controller
 
         return back()->with('success', 'Adoption request approved.');
     }
+
 
     public function reject(Adoption $adoption)
     {
@@ -76,13 +79,41 @@ class AdoptionController extends Controller
         return back()->with('error', 'Adoption request rejected.');
     }
 
+
     public function destroy(Adoption $adoption)
     {
-        $this->authorize('delete', $adoption);
-        $adoption->delete();
+        // Log the current user and adoption request details for debugging
+        Log::info('Attempting to delete adoption request', [
+            'user_id' => Auth::id(),
+            'adoption_user_id' => $adoption->user_id,
+            'adoption_status' => $adoption->status,
+        ]);
 
-        return back()->with('success', 'Adoption request deleted.');
+        // Ensure only the owner can delete their own adoption request if it's still pending
+        if (Auth::id() !== $adoption->user_id) {
+            abort(403, 'Unauthorized: You are not the owner of this adoption request.');
+        }
+
+        if ($adoption->status !== 'pending') {
+            return back()->with('error', 'Only pending adoption requests can be deleted.');
+        }
+
+        // Perform deletion (handle soft deletes if applicable)
+        if (method_exists($adoption, 'forceDelete')) {
+            $adoption->forceDelete(); // Use forceDelete if using SoftDeletes
+        } else {
+            $adoption->delete();
+        }
+
+        // Log success message
+        Log::info('Adoption request deleted successfully', [
+            'deleted_by' => Auth::id(),
+            'adoption_id' => $adoption->id,
+        ]);
+
+        return back()->with('success', 'Adoption request deleted successfully.');
     }
+
 
     public function adoptionLog()
     {
@@ -97,6 +128,45 @@ class AdoptionController extends Controller
 
         return view('pages.adoptions.adoption-log', compact('adoptions'));
     }
+
+    public function edit(Adoption $adoption)
+    {
+
+        $adoptions = Adoption::with('user', 'pet')->get();
+        $pets = Pet::all();
+
+        if (Auth::id() !== $adoption->user_id || $adoption->status !== 'pending') {
+            abort(403, 'Unauthorized action');
+        }
+
+        return view('pages.adoptions.edit', compact('adoption', 'pets'));
+    }
+
+    public function update(Request $request, Adoption $adoption)
+    {
+
+        if (Auth::id() !== $adoption->user_id || $adoption->status !== 'pending') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $validated = $request->validate([
+            'pet_id' => 'required|exists:pets,id',
+            'last_name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'address' => 'required|string',
+            'contact_number' => 'required|string|max:20',
+            'dob' => 'required|date',
+            'previous_experience' => 'required|in:yes,no',
+            'other_pets' => 'required|in:yes,no',
+            'financial_preparedness' => 'required|in:yes,no',
+        ]);
+
+        $adoption->update($validated);
+
+        return redirect()->route('adopt.index')->with('success', 'Adoption request updated successfully.');
+    }
+
 
     public function create(Request $request)
     {

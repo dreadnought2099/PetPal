@@ -7,7 +7,7 @@
 
     <div class="flex items-center space-x-6 text-lg font-bold">
         <a href="{{ url('/') }}" class="hover-underline">Home</a>
-        <a href="{{ url('/pets') }}" class="hover-underline">Our Pets</a>
+        <a href="{{ route('pets.index') }}" class="hover-underline">Our Pets</a>
         @if (auth()->check() && auth()->user()->hasRole('Shelter|Administrator'))
             <a href="{{ route('pets.create') }}" class="hover-underline">Add Pet</a>
         @endif

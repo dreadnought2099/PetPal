@@ -52,7 +52,7 @@
             <div class="flex justify-between mt-4">
                 <button onclick="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded cursor-pointer">Close</button>
                 @if (auth()->guest() || auth()->user()->hasRole('Adopter'))
-                    <a id="adoptNowBtn" href="{{ route('adoption.apply', ['pet_id' => $pet->id]) }}"
+                    <a id="adoptNowBtn" href="{{ route('adopt.store', ['pet_id' => $pet->id]) }}"
                         class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">Adopt Now
                     </a>
                 @endif
