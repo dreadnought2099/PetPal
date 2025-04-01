@@ -2,6 +2,27 @@
 
 @section('content')
 <div class="container mx-auto">
+    <div class="relative w-full">
+        {{-- Session Message --}}
+        <div id="success-message-container" class="absolute top-4 right-4 z-0">
+            @if (session('success') || session('info'))
+                <div id="message"
+                    class="p-3 rounded-md shadow-lg border-l-4
+                  {{ session('success') ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
+                    {{ session('success') ?? session('info') }}
+                </div>
+
+                <script>
+                    setTimeout(() => {
+                        let messageDiv = document.getElementById('message');
+                        if (messageDiv) {
+                            messageDiv.style.display = 'none';
+                        }
+                    }, 4000);
+                </script>
+            @endif
+        </div>
+
     <h2 class="text-2xl font-bold mb-4">Adoption Log</h2>
 
     <table class="table-auto w-full border-collapse border border-gray-300">
@@ -20,15 +41,17 @@
                 <td class="border p-2">{{ $adoption->id }}</td>
                 <td class="border p-2">{{ $adoption->first_name }} {{ $adoption->last_name }}</td>
                 <td class="border p-2">{{ $adoption->pet_id }}</td>
-                <td class="border p-2">{{ ucfirst($adoption->status) }}</td>
+                <td class="border p-2 {{ $adoption->status === 'approved' ? 'text-primary' : ($adoption->status === 'rejected' ? 'text-secondary' : 'text-yellow-400') }}">
+                    {{ ucfirst( $adoption->status ) }}
+                </td>
                 <td class="border p-2">
                     @if (Auth::id() === $adoption->user_id && $adoption->status === 'pending')
-                        <a href="{{ route('adopt.edit', $adoption->id) }}" class="border-1 hover:border-primary bg-primary hover:bg-white hover:text-primary text-white font-bold py-2 px-4 rounded-lg transition hover:scale-105 hover:opacity-80 duration-300 ease-in-out">
+                        <a href="{{ route('adopt.edit', $adoption->id) }}" class="border-1 hover:border-primary bg-primary hover:bg-white hover:text-primary text-white font-bold py-2 px-4 rounded transition hover:scale-105 hover:opacity-80 duration-300 ease-in-out mr-4">
                             Edit
                         </a>
                         <form action="{{ route('adopt.destroy', $adoption->id) }}" method="POST" class="inline">
                             @csrf @method('DELETE')
-                            <button class="bg-gray-500 text-white px-2 py-1 rounded">Delete</button>
+                            <button class="border-1 hover:border-secondary bg-white  hover:text-secondary text-dark font-bold py-2 px-4 rounded transition hover:scale-105 hover:opacity-80 duration-300 ease-in-out cursor-pointer">Delete</button>
                         </form>
                     @elseif(Auth::user()->hasRole('Administrator') || Auth::user()->hasRole('Shelter'))
                         <form action="{{ route('adopt.approve', $adoption->id) }}" method="POST" class="inline">

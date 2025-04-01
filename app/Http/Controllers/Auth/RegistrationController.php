@@ -48,9 +48,9 @@ class RegistrationController extends Controller
             // Ma login ang user after successfully registering
             Auth::login($user);
 
-            $user->assignRole('adopter');
+            $user->assignRole('Adopter');
 
-            return redirect()->route('records.index')->with('success', "Registration successful! Welcome, {$user->name}."); 
+            return redirect()->route('pets.index')->with('success', "Registration successful! Welcome, {$user->name}."); 
         } catch (\Exception $e) {
 
             Log::error('User registration failed successfully: ' . $e->getMessage());

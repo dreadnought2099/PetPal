@@ -82,6 +82,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Adoption Request Management
         Route::patch('/adopt/{adoption}/approve', [AdoptionController::class, 'approve'])->name('adopt.approve');
         Route::patch('/adopt/{adoption}/reject', [AdoptionController::class, 'reject'])->name('adopt.reject');
+        Route::get('/adopt/pending', [AdoptionController::class, 'pending'])->name('adopt.pending');
     });
 
     // Adopter

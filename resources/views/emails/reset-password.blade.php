@@ -2,7 +2,7 @@
 # Password Reset Request
 
 
-Hello,  <span style="color: #a31621;">**{{ $user->name }}**</span>
+Hello,  <span style="color: #49b451;">**{{ $user->name }}**</span>
 
 You requested to reset your password. Click the button below to proceed:
 
@@ -19,5 +19,5 @@ Reset Password
 If you did not request this, please ignore this email.
 
 Thanks,  
-<span style="color: #a31621;">{{ config('app.name') }}</span>
+<span style="color: #49b451;">{{ config('app.name') }}</span>
 @endcomponent

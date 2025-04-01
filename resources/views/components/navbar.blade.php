@@ -10,6 +10,7 @@
         <a href="{{ route('pets.index') }}" class="hover-underline">Our Pets</a>
         @if (auth()->check() && auth()->user()->hasRole('Shelter|Administrator'))
             <a href="{{ route('pets.create') }}" class="hover-underline">Add Pet</a>
+            <a href="{{ route('adopt.pending') }}" class="hover-underline">Pending Requests</a>
         @endif
 
         @auth

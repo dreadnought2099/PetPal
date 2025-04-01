@@ -5,6 +5,7 @@
     @php$selectedPet = $selectedPet ?? null;
         $pets = $pets ?? collect();
     @endphp
+
     <div
         class="container mx-auto max-w-5xl bg-white mt-4 border border-primary rounded-lg shadow-md overflow-y-auto h-[80vh]">
         <h1 class="flex gap-[5px] sticky top-0 py-2 px-4 text-2xl font-bold bg-white z-10 justify-center">
@@ -85,7 +86,7 @@
 
             <div class="flex flex-col space-y-4 md:flex-row  md:space-x-4 md:space-y-0">
                 {{-- Add Button --}}
-                <button type="submit"
+                <button type="submit" 
                     class="border-1 hover:border-primary bg-primary hover:bg-white hover:text-primary text-white font-bold py-2 px-4 rounded-lg transition hover:scale-105 hover:opacity-80 duration-300 ease-in-out   ">
                     Save changes
                 </button>

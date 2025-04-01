@@ -47,12 +47,20 @@
         background-color: var(--color-dark);
     }
 
+    .bg-secondary {
+        background-color: var(--color-secondary);
+    }
+
     .text-primary {
         color: var(--color-primary);
     }
 
     .text-secondary {
         color: var(--color-secondary);
+    }
+
+    .text-dark {
+        color: var(--color-dark);
     }
 
     .border-primary {
@@ -72,12 +80,24 @@
         background-color: var(--color-primary);
     }
 
+    .hover\:bg-secondary:hover {
+        background-color: var(--color-secondary);
+    }
+
     .hover\:border-primary:hover {
         border-color: var(--color-primary);
     }
 
+    .hover\:border-secondary:hover {
+        border-color: var(--color-secondary);
+    }
+
     .hover\:text-primary:hover {
         color: var(--color-primary);
+    }
+
+    .hover\:text-secondary:hover {
+        color: var(--color-secondary);
     }
 
     .hover\:text-dark:hover {

@@ -54,7 +54,7 @@ class AdoptionController extends Controller
                 'status' => 'pending',
             ]);
 
-            return redirect()->route('adopt.index')->with('success', "Adoption request (ID: {$adoptionRequest->id}) submitted successfully!");
+            return redirect()->route('adopt.log')->with('success', "Adoption request (ID: {$adoptionRequest->id}) submitted successfully!");
         } catch (\Exception $e) {
             Log::error("Adoption Request Error: " . $e->getMessage());
             return back()->with('error', 'Failed to submit adoption request. Please try again.');
@@ -106,12 +106,12 @@ class AdoptionController extends Controller
         }
 
         // Log success message
-        Log::info('Adoption request deleted successfully', [
+        Log::info("Adoption request with ID {$adoption->id} deleted successfully", [
             'deleted_by' => Auth::id(),
             'adoption_id' => $adoption->id,
         ]);
 
-        return back()->with('success', 'Adoption request deleted successfully.');
+        return back()->with('success', "Adoption request with ID {$adoption->id} deleted successfully.");
     }
 
 
@@ -162,9 +162,15 @@ class AdoptionController extends Controller
             'financial_preparedness' => 'required|in:yes,no',
         ]);
 
-        $adoption->update($validated);
+        $adoption->fill($validated);
 
-        return redirect()->route('adopt.index')->with('success', 'Adoption request updated successfully.');
+        if ($adoption->isDirty()) {
+            $adoption->save();
+            return redirect()->route('adopt.log')->with('success', "Adoption request with ID {$adoption->id} updated successfully.");
+        }
+
+        return redirect()->route('adopt.log')->with('info', "No changes were made in ID {$adoption->id}.");
+
     }
 
 
@@ -174,5 +180,14 @@ class AdoptionController extends Controller
         $pets = Pet::all(); // Fetch all available pets
 
         return view('pages.adoptions.index', compact('pets', 'selectedPet'));
+    }
+
+    public function pending()
+    {
+        $adoptions = Adoption::with('pet')  // Load pet details for each adoption request
+            ->where('status', 'pending')
+            ->get();
+
+        return view('pages.adoptions.pending-request', compact('adoptions'));
     }
 }

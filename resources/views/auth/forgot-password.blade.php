@@ -3,7 +3,7 @@
 @section('content')
     <div class="w-screen h-screen flex flex-col justify-start items-center bg-gray-200 pt-32">
 
-        <div class="absolute top-4 right-4 z-0">
+        <div class="absolute top-24 right-4 z-0">
             @if (session('status'))
                 <div id="message" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-3 rounded-md w-full text-center">
                     {{ session('status') }}
