@@ -1,4 +1,4 @@
-<div class="bg-green-50 border border-green-200 rounded-lg p-4 text-center transition-all hover:shadow-md hover:border-green-300">
+{{-- <div class="bg-green-50 border border-green-200 rounded-lg p-4 text-center transition-all hover:shadow-md hover:border-green-300">
     <!-- Optimized image with lazy loading and better error handling -->
     <img 
         src="{{ $pet->pet_profile_path ? asset('storage/' . $pet->pet_profile_path) : asset('images/LRM_20240517_192913-01.jpeg') }}" 
@@ -25,4 +25,4 @@
         class="bg-green-500 text-white px-4 py-2 rounded mt-3 w-full hover:bg-green-600 transition">
         View Details
     </button>
-</div>
+</div> --}}

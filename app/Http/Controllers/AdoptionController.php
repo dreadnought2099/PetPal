@@ -16,7 +16,8 @@ class AdoptionController extends Controller
     public function index()
     {
         $adoptions = Adoption::with('user', 'pet')->get();
-        return view('pages.adoptions.index', compact('adoptions'));
+        $pets = Pet::all(); // Fetch all pets
+        return view('pages.adoptions.index', compact('adoptions', 'pets'));
     }
 
     public function store(Request $request)
@@ -99,10 +100,9 @@ class AdoptionController extends Controller
 
     public function create(Request $request)
     {
-        $selectedPet = $request->has('pet_id') ? Pet::find($request->query('pet_id')) : null;
+        $selectedPet = $request->input('pet_id') ? Pet::find($request->input('pet_id')) : null;
         $pets = Pet::all(); // Fetch all available pets
 
-        // Pass both selectedPet and pets to the view
         return view('pages.adoptions.index', compact('pets', 'selectedPet'));
     }
 }

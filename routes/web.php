@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\PetController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Auth\Notifications\ResetPassword;
 
 Route::get('/', function () {
@@ -24,6 +25,8 @@ Route::middleware('auth')->post('/logout', [LoginController::class, 'logout'])->
 
 // Profile outisde the verified middleware so user can still access profile page even the email is unverified
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+
 Route::get('/pets', [PetController::class, 'index'])->name('pets.index');
 
 
@@ -86,6 +89,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/adopt', [AdoptionController::class, 'index'])->name('adopt.index');
         Route::post('/adopt/request', [AdoptionController::class, 'store'])->name('adopt.store');
         Route::get('/adopt/log', [AdoptionController::class, 'adoptionLog'])->name('adopt.log');
-        Route::get('/adoption/apply', [AdoptionController::class, 'create'])->name('adoption.apply');
+        Route::get('/adoption/create', [AdoptionController::class, 'create'])->name('adoption.create');
     });
 });

@@ -15,7 +15,7 @@
                 <p class="text-gray-600">{{ $pet->breed }}</p>
 
                 <!-- Open Modal Button -->
-                <button onclick='openModal(@json($pet))' class="mt-4 text-blue-500 hover:underline">See
+                <button onclick='openModal(@json($pet))' class="mt-4 text-primary hover-underline-hyperlink cursor-pointer">See
                     more</button>
             </div>
         @endforeach
@@ -50,8 +50,8 @@
 
             <!-- Buttons -->
             <div class="flex justify-between mt-4">
-                <button onclick="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Close</button>
-                @if (auth()->check() && auth()->user()->hasRole('Adopter'))
+                <button onclick="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded cursor-pointer">Close</button>
+                @if (auth()->guest() || auth()->user()->hasRole('Adopter'))
                     <a id="adoptNowBtn" href="{{ route('adoption.apply', ['pet_id' => $pet->id]) }}"
                         class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">Adopt Now
                     </a>
