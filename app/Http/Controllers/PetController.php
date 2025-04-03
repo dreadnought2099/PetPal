@@ -48,14 +48,85 @@ class PetController extends Controller
         }
 
         $validated['user_id'] = auth()->id();
-        
+
         try {
             $pet = Pet::create($validated);
             return redirect()->route('pets.index')->with('success', "Pet {$pet->name} was added successfully.");
         } catch (Exception $e) {
-            return redirect()->route('pets.index')->with('error', 'Failed to add pet: '. $e->getMessage());
-
+            return redirect()->route('pets.index')->with('error', 'Failed to add pet: ' . $e->getMessage());
         }
-       
+    }
+
+    public function destroy($id)
+    {
+
+        $pet = Pet::findOrFail($id);
+
+        // Check if the user has permission to delete the pet listing
+        if (!auth()->user()->can('delete pet listing')) {
+            abort(403, 'Unauthorized action');
+        }
+
+        // Delete the pet
+        $pet->delete();
+
+        return redirect()->route('pets.index')->with('success', 'Pet listing deleted successfully.');
+    }
+
+    public function update(Request $request, $id)
+    {
+
+        $pet = Pet::findOrFail($id);
+
+        // Check if the user has permission to edit the pet listing
+        if (!auth()->user()->can('edit pet listing')) {
+            abort(403, 'Unauthorized action');
+        }
+
+        // Validate the incoming request
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'age' => 'required|integer|min:0|max:50',
+            'breed' => 'required|string|max:100',
+            'allergies' => 'nullable|string',
+            'description' => 'nullable|string',
+            'profile' => 'nullable|image|max:51200',
+            'sex' => 'sometimes|in:M,F',
+            'species' => 'sometimes|integer|in:0,1',
+            'vaccination' => 'required|integer|in:0,1,3',
+            'spayed_neutered' => 'sometimes|boolean',
+        ]);
+
+        // Handle the profile image upload if provided
+        if ($request->hasFile('profile')) {
+            $file = $request->file('profile');
+            $cleanPetName = Str::slug($validated['name']); // "Fluffy Cat!" -> "fluffy-cat"
+            $filename = $cleanPetName . '-' . time() . '-' . $file->getClientOriginalExtension(); // "fluffy-cat-16987654
+            $path = $file->storeAs('pets/profile_photos', $filename, 'public');
+            $validated['pet_profile_path'] = $path; // Save path to DB
+        }
+
+        try {
+            // Update the pet with validated data
+            $pet->update($validated);
+            return redirect()->route('pets.index')->with('success', 'Pet listing updated successfully.');
+        } catch (Exception $e) {
+            return redirect()->route('pets.index')->with('error', 'Failed to update pet: ' . $e->getMessage());
+        }
+
+        return redirect()->route('pets.index')->with('success', 'Pet listing updated successfully.');
+    }
+
+    public function edit($id)
+    {
+
+        $pet = Pet::findOrFail($id);
+
+        // Check if the user has permission to edit the pet listing
+        if (!auth()->user()->can('edit pet listing')) {
+            abort(403, 'Unauthorized action');
+        }
+
+        return view('pages.pets.edit', compact('pet'));
     }
 }

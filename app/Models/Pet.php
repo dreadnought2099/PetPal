@@ -19,13 +19,18 @@ class Pet extends Model
      // Species constants
      const SPECIES_DOG = 0;
      const SPECIES_CAT = 1;
- 
+
+    // Status constants
+    const STATUS_AVAILABLE = 'available';
+    const STATUS_PENDING = 'pending';
+    const STATUS_ADOPTED = 'adopted';
 
     protected $fillable = [
         'name',
         'age',
         'breed',
         'allergies',
+        'status', // available, pending, or adopted
         'description',
         'pet_profile_path',
         'sex',
@@ -64,7 +69,7 @@ class Pet extends Model
     public function getProfilePhotoUrlAttribute() {
         return $this->pet_profile_path
             ? asset('storage/' . $this->pet_profile_path)
-            : asset('images/default-pet.png'); // Default Profile Pic for Pets
+            : asset('images/LRM_20240517_192913-01.jpeg'); // Default Profile Pic for Pets
     }
 
     // Auto-delete files when pet is deleted
@@ -79,11 +84,26 @@ class Pet extends Model
         });
     }
 
+    // Scope to filter available pets
+    public function scopeAvailable($query) {
+        return $query->where('status', self::STATUS_AVAILABLE);
+    }
+
 
     // Relationships
     public function user() {
 
         return $this->belongsTo(User::class);
+    }
+
+    public function isAvailableForAdoption() {
+        return $this->status === self::STATUS_AVAILABLE;
+    }
+
+    public function markAsAdopted() {
+        
+        $this->status = self::STATUS_ADOPTED;
+        $this->save();
     }
 
 }

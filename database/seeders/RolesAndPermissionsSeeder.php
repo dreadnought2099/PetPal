@@ -28,6 +28,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'delete request',
             'delete user',
             'edit pet listing',
+            'delete pet listing',
             'change role',
             'request adoption',
             'view pets',
@@ -55,6 +56,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'Shelter' => [
                 'accept adoption request', 
                 'edit pet listing', 
+                'delete pet listing',
                 'delete request', 
                 'view pets', 
                 'adoption status'
@@ -65,6 +67,7 @@ class RolesAndPermissionsSeeder extends Seeder
                 'delete request', 
                 'delete user', 
                 'edit pet listing', 
+                'delete pet listing',
                 'change role', 
                 'view pets', 
                 'adoption status'

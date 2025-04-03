@@ -78,6 +78,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/pets', [PetController::class, 'store'])->name('pets.store');
         Route::get('/pets/{id}/edit', [PetController::class, 'edit'])->name('pets.edit');
         Route::put('/pets/{id}', [PetController::class, 'update'])->name('pets.update');
+        Route::delete('/pets/{pet}', [PetController::class, 'destroy'])->name('pets.destroy');
 
         // Adoption Request Management
         Route::patch('/adopt/{adoption}/approve', [AdoptionController::class, 'approve'])->name('adopt.approve');

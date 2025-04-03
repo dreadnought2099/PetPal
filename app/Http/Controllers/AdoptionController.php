@@ -41,6 +41,13 @@ class AdoptionController extends Controller
                 'financial_preparedness' => 'required|in:yes,no',
             ]);
 
+            // Check if the pet is available for adoption
+            $pet = Pet::findOrFail($validated['pet_id']);
+            if ($pet->status === Pet::STATUS_ADOPTED) {
+                return back()->with('error', 'This pet has already been adopted.');
+            }
+
+            // If the pet is available, proceed with the adoption request
             if ($request->hasFile('valid_id')) {
                 Log::info('File uploaded', ['file' => $request->file('valid_id')->getClientOriginalName()]);
 
@@ -54,7 +61,6 @@ class AdoptionController extends Controller
                 Log::warning('No file uploaded');
             }
 
-            $adoptionRequest = null;
             try {
                 $adoptionRequest = Adoption::create([
                     'user_id' => Auth::id(), // Attach the adopter's ID
@@ -71,6 +77,9 @@ class AdoptionController extends Controller
                     'financial_preparedness' => $validated['financial_preparedness'],
                     'status' => 'pending',
                 ]);
+
+                $pet->status = Pet::STATUS_ADOPTED;
+                $pet->save();
 
                 Log::info('Adoption request created', ['adoption_request_id' => $adoptionRequest->id]);
             } catch (\Exception $e) {

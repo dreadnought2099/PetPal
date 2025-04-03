@@ -27,18 +27,30 @@
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8 cursor-pointer">
             @foreach ($pets as $pet)
-                <!-- Pet Card -->
-                <div class="bg-white p-4 rounded-lg shadow-md">
-                    <img src="{{ $pet->pet_profile_path ? asset('storage/' . $pet->pet_profile_path) : asset('images/LRM_20240517_192913-01.jpeg') }}"
-                        alt="{{ $pet->name }}" class="w-full h-48 object-cover rounded-lg">
-                    <h3 class="text-xl font-bold mt-4">{{ $pet->name }}</h3>
-                    <p class="text-gray-600">{{ $pet->breed }}</p>
+                @if ($pet->status !== 'adopted')
+                    <!-- Pet Card -->
+                    <div class="bg-white p-4 rounded-lg shadow-md">
+                        <img src="{{ $pet->pet_profile_path ? asset('storage/' . $pet->pet_profile_path) : asset('images/LRM_20240517_192913-01.jpeg') }}"
+                            alt="{{ $pet->name }}" class="w-full h-48 object-cover rounded-lg">
+                        <h3 class="text-xl font-bold mt-4">{{ $pet->name }}</h3>
+                        <p class="text-gray-600">{{ $pet->breed }}</p>
 
-                    <!-- Open Modal Button -->
-                    <button onclick='openModal(@json($pet))'
-                        class="mt-4 text-primary hover-underline-hyperlink cursor-pointer">See
-                        more</button>
-                </div>
+                        <!-- Pet Status: Change starts here -->
+                        <p
+                            class="text-sm mt-2 font-medium 
+                        {{ $pet->status === 'adopted' ? 'text-red-500' : 'text-green-500' }}">
+                            Status: {{ ucfirst($pet->status) }}
+                        </p>
+                        <!-- Pet Status: Change ends here -->
+
+                        <!-- Open Modal Button -->
+                        <button onclick='openModal(@json($pet))'
+                            class="mt-4 text-primary hover-underline-hyperlink cursor-pointer">
+                            See more
+                        </button>
+
+                    </div>
+                @endif
             @endforeach
         </div>
 
@@ -68,15 +80,52 @@
                     <p class="mt-3"><strong>Description:</strong></p>
                     <p id="petDescription" class="border p-2 rounded bg-gray-100"></p>
 
+                    <!-- Adoption Status: Change starts here -->
+                    @if ($pet->status === 'adopted')
+                        <div class="text-center text-red-500">
+                            <p>This pet has already been adopted.</p>
+                        </div>
+                    @endif
+                    <!-- Adoption Status: Change ends here -->
+
                     <!-- Buttons -->
                     <div class="flex justify-between mt-4">
-                        <button onclick="closeModal()"
-                            class="bg-gray-500 text-white px-4 py-2 rounded cursor-pointer">Close</button>
-                        @if (auth()->guest() || auth()->user()->hasRole('Adopter'))
-                            <a id="adoptNowBtn" href="{{ route('adopt.store', ['pet_id' => $pet->id]) }}"
-                                class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">Adopt Now
+                        {{-- <button onclick="closeModal()"
+                            class="bg-gray-500 text-white px-4 py-2 rounded cursor-pointer">
+                            Close
+                        </button> --}}
+
+                        @if (auth()->user()->can('edit pet listing'))
+                            <a href="{{ route('pets.edit', $pet->id) }}" class="
+                                bg-primary text-white px-4 py-2 rounded hover:bg-white border-1 border-primary hover:text-primary transition cursor-pointer">
+                                Edit Pet Listing
                             </a>
                         @endif
+
+                        <!-- Delete Button (only visible to Shelter/Administrator) -->
+                        @if (auth()->user()->can('delete pet listing'))
+                            <form action="{{ route('pets.destroy', $pet->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition cursor-pointer">
+                                    Delete Pet Listing
+                                </button>
+                            </form>
+                        @endif
+
+                        <!-- Adopt Now Button: Change starts here -->
+                        @if (auth()->guest() || auth()->user()->hasRole('Adopter'))
+                            @if ($pet->status === 'adopted')
+                                <button class="bg-gray-500 text-white px-4 py-2 rounded cursor-not-allowed" disabled>Adopt
+                                    Now</button>
+                            @else
+                                <a id="adoptNowBtn" href="{{ route('adopt.store', ['pet_id' => $pet->id]) }}"
+                                    class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">Adopt
+                                    Now</a>
+                            @endif
+                        @endif
+                        <!-- Adopt Now Button: Change ends here -->
                     </div>
                 </div>
             </div>
