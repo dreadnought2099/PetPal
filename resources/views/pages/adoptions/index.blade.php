@@ -15,7 +15,7 @@
         </h1>
 
         {{-- Session Message --}}
-        <div id="success-message-container" class="absolute top-24 right-4 z-0">
+        <div id="success-message-container" class="absolute top-24 right-4 z-10">
             @if (session('success') || session('error'))
                 <div id="message"
                     class="p-3 rounded-md shadow-lg border-l-4
@@ -33,7 +33,7 @@
                 </script>
             @endif
         </div>
-        <form action="{{ route('adopt.store') }}" method="POST" class="rounded-lg px-8 pt-6 pb-8 mb-4 space-y-6">
+        <form action="{{ route('adopt.store') }}" method="POST" enctype="multipart/form-data" class="rounded-lg px-8 pt-6 pb-8 mb-4 space-y-6 z-9">
             @csrf
 
             @php
@@ -64,7 +64,18 @@
                     <label class="{{ $labelClasses }}">{{ $label }}</label>
                 </div>
             @endforeach
-
+            
+            <div class="relative bg-inherit">
+                <label class="{{ $labelClasses }}">Upload Valid ID (JPEG, PNG, JPG, PDF)</label>
+                <input type="file" name="valid_id"
+                    class="{{ $inputClasses }}"
+                    accept=".jpeg,.png,.jpg,.pdf" required>
+            </div>
+            @if ($errors->has('valid_id'))
+                <p class="text-red-500 text-xs mt-1">{{ $errors->first('valid_id') }}</p>
+            @endif
+            
+            
             @php
                 $questions = [
                     'previous_experience' => 'Do you have previous pet ownership experience?',

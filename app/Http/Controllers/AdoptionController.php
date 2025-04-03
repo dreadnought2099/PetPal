@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class AdoptionController extends Controller
 {
@@ -34,28 +35,53 @@ class AdoptionController extends Controller
                 'address' => 'required|string',
                 'contact_number' => 'required|string|max:20',
                 'dob' => 'required|date',
+                'valid_id' => 'required|file|mimes:jpeg,png,jpg,pdf|max:51200', // Validation for valid_id (required)
                 'previous_experience' => 'required|in:yes,no',
                 'other_pets' => 'required|in:yes,no',
                 'financial_preparedness' => 'required|in:yes,no',
             ]);
 
-            $adoptionRequest = Adoption::create([
-                'user_id' => Auth::id(), // Attach the adopter's ID
-                'pet_id' => $request->pet_id,
-                'last_name' => $validated['last_name'],
-                'first_name' => $validated['first_name'],
-                'middle_name' => $validated['middle_name'],
-                'address' => $validated['address'],
-                'contact_number' => $validated['contact_number'],
-                'dob' => $validated['dob'],
-                'previous_experience' => $validated['previous_experience'],
-                'other_pets' => $validated['other_pets'],
-                'financial_preparedness' => $validated['financial_preparedness'],
-                'status' => 'pending',
-            ]);
+            if ($request->hasFile('valid_id')) {
+                Log::info('File uploaded', ['file' => $request->file('valid_id')->getClientOriginalName()]);
+
+                $file = $request->file('valid_id');
+                $filename = time() . '-' . $file->getClientOriginalName();
+                $path = $file->storeAs('adoption/valid_ids', $filename, 'public');
+
+                Log::info('File stored at path', ['path' => $path]);
+                $validated['valid_id'] = $path;
+            } else {
+                Log::warning('No file uploaded');
+            }
+
+            $adoptionRequest = null;
+            try {
+                $adoptionRequest = Adoption::create([
+                    'user_id' => Auth::id(), // Attach the adopter's ID
+                    'pet_id' => $request->pet_id,
+                    'last_name' => $validated['last_name'],
+                    'first_name' => $validated['first_name'],
+                    'middle_name' => $validated['middle_name'],
+                    'address' => $validated['address'],
+                    'contact_number' => $validated['contact_number'],
+                    'dob' => $validated['dob'],
+                    'valid_id' => $validated['valid_id'],
+                    'previous_experience' => $validated['previous_experience'],
+                    'other_pets' => $validated['other_pets'],
+                    'financial_preparedness' => $validated['financial_preparedness'],
+                    'status' => 'pending',
+                ]);
+
+                Log::info('Adoption request created', ['adoption_request_id' => $adoptionRequest->id]);
+            } catch (\Exception $e) {
+                Log::error("Failed to create adoption request: " . $e->getMessage());
+                return back()->with('error', 'Failed to submit adoption request. Please try again.');
+            }
 
             return redirect()->route('adopt.log')->with('success', "Adoption request (ID: {$adoptionRequest->id}) submitted successfully!");
+
         } catch (\Exception $e) {
+             // Log the error if validation or any other error occurs
             Log::error("Adoption Request Error: " . $e->getMessage());
             return back()->with('error', 'Failed to submit adoption request. Please try again.');
         }

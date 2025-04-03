@@ -14,9 +14,19 @@ class Adoption extends Model
     protected $table = 'adoption_requests';
 
     protected $fillable = [
-        'user_id', 'pet_id', 'last_name', 'first_name', 'middle_name', 'address', 
-        'contact_number', 'dob', 'previous_experience', 'other_pets', 
-        'financial_preparedness', 'status'
+        'user_id', 
+        'pet_id', 
+        'last_name', 
+        'first_name', 
+        'middle_name', 
+        'address', 
+        'contact_number', 
+        'dob', 
+        'valid_id',
+        'previous_experience', 
+        'other_pets', 
+        'financial_preparedness', 
+        'status'
     ];
 
     // Define relationships properly
