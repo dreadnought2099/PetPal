@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-    @php$selectedPet = $selectedPet ?? null;
-            $pets = $pets ?? collect();
-    @endphp 
+    @php
+        $selectedPet = $selectedPet ?? null;
+        $pets = $pets ?? collect();
+    @endphp
 
     <div
         class="container mx-auto max-w-5xl bg-white mt-4 border border-primary rounded-lg shadow-md overflow-y-auto h-[80vh]">
@@ -81,10 +82,10 @@
                 </fieldset>
             @endforeach
 
-            <div class="flex flex-col space-y-4 md:flex-row  md:space-x-4 md:space-y-0">
+            <div class="flex space-y-4 md:flex-row  md:space-x-4 md:space-y-0">
                 {{-- Add Button --}}
                 <button type="submit"
-                    class="border-1 hover:border-primary bg-primary hover:bg-white hover:text-primary text-white font-bold py-2 px-4 rounded-lg transition hover:scale-105 hover:opacity-80 duration-300 ease-in-out   ">
+                    class="border-1 hover:border-primary bg-primary hover:bg-white hover:text-primary cursor-pointer text-white font-bold py-2 px-4 rounded-lg transition hover:scale-105 hover:opacity-80 duration-300 ease-in-out">
                     Apply Now
                 </button>
                 {{-- Back Button --}}

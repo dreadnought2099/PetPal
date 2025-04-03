@@ -14,11 +14,11 @@
         @endif
 
         @auth
-            @if(auth()->user()->hasRole('Adopter'))
+            @if (auth()->user()->hasRole('Adopter'))
                 <a href="{{ route('adopt.index') }}" class="hover-underline">Apply for Adoption</a>
             @endif
 
-            <div x-data="{ open: false }" class="relative">
+            <div x-data="{ open: false }" class="relative z-20">
                 <!-- Dropdown Button -->
                 <button @click="open = !open"
                     class="flex items-center space-x-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200">
@@ -40,13 +40,14 @@
                         </li>
                         @if (auth()->check() && auth()->user()->hasRole('Adopter'))
                             <li>
-                                <a href="{{ route('adopt.log') }}" 
+                                <a href="{{ route('adopt.log') }}"
                                     class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Adoption Log
                                 </a>
                             </li>
                         @endif
                         <li>
-                            <a href="{{ route('settings.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Settings</a>
+                            <a href="{{ route('settings.index') }}"
+                                class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Settings</a>
                         </li>
                         <li>
                             <form action="{{ route('logout') }}" method="POST">

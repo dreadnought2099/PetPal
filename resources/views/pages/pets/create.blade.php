@@ -1,10 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-2xl font-bold mb-4 text-center">Add a Pet</h2>
+    <div
+        class="container mx-auto max-w-5xl bg-white mt-4 border border-primary rounded-lg shadow-md overflow-y-auto h-[80vh]">
+        <h2 class="flex gap-[5px] sticky top-0 py-2 px-4 text-2xl font-bold bg-white z-10 justify-center">Add a <span
+                class="text-primary">Pet</span></h2>
 
-        <form action="{{ route('pets.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('pets.store') }}" method="POST" enctype="multipart/form-data"
+            class="rounded-lg px-8 pt-6 pb-8 mb-4 space-y-2">
             @csrf
 
             @if (session('success'))
@@ -27,6 +30,7 @@
                     'absolute cursor-text left-0 -top-3 text-sm text-gray-600 bg-white mx-1 px-1 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-primary peer-focus:text-sm peer-focus:bg-white peer-focus:px-2 peer-focus:rounded-md';
             @endphp
 
+
             <label class="block font-semibold">Pet's Name</label>
             <input type="text" name="name" class="w-full p-2 border rounded mb-4" required>
 
@@ -40,7 +44,8 @@
             <input type="text" name="allergies" class="w-full p-2 border rounded mb-4" required>
 
             <label class="block font-semibold">Description</label>
-            <textarea name="description" cols="10" rows="5" class="w-full p-2 border rounded mb-4" placeholder="Write a short description about the pet..."></textarea>
+            <textarea name="description" cols="10" rows="5" class="w-full p-2 border rounded mb-4"
+                placeholder="Write a short description about the pet..."></textarea>
 
             <label class="block font-semibold">Pet Profile (Upload Image)</label>
             <input type="file" name="profile" class="w-full p-2 border rounded mb-4" accept="image/*">
@@ -70,9 +75,16 @@
                 <label><input type="radio" name="spayed_neutered" value="1" required> No</label>
             </div>
 
-            <div class="flex justify-between mt-4">
-                <a href="{{ url()->previous() }}" class="bg-gray-500 text-white px-4 py-2 rounded">Back</a>
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Add</button>
+            <div class="flex space-y-4 md:flex-row  md:space-x-4 md:space-y-0">
+                <button type="submit"
+                    class="border-1 hover:border-primary bg-primary hover:bg-white hover:text-primary cursor-pointer text-white font-bold py-2 px-4 rounded-lg transition hover:scale-105 hover:opacity-80 duration-300 ease-in-out">
+                    Add
+                </button>
+                <a href="{{ url()->previous() }}"
+                    class="border-1 hover:border-primary bg-white hover:bg-white hover:text-primary text-dark font-bold py-2 px-4 rounded-lg transition hover:scale-105 hover:opacity-80 duration-300 ease-in-out">
+                    Back
+                </a>
+
             </div>
         </form>
     </div>
