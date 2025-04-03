@@ -61,7 +61,7 @@
                 <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-lg relative">
                     <!-- Close Button -->
                     <button onclick="closeModal()"
-                        class="absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-2xl">&times;</button>
+                        class="absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-2xl cursor-pointer">&times;</button>
 
                     <!-- Pet Image -->
                     <img id="petImage" src="" alt="Pet Image" class="w-full h-48 object-cover rounded-lg mb-4">
@@ -118,11 +118,13 @@
                         @if (auth()->guest() || auth()->user()->hasRole('Adopter'))
                             @if ($pet->status === 'adopted')
                                 <button class="bg-gray-500 text-white px-4 py-2 rounded cursor-not-allowed" disabled>Adopt
-                                    Now</button>
+                                    Now
+                                </button>
                             @else
                                 <a id="adoptNowBtn" href="{{ route('adopt.store', ['pet_id' => $pet->id]) }}"
                                     class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">Adopt
-                                    Now</a>
+                                    Now
+                                </a>
                             @endif
                         @endif
                         <!-- Adopt Now Button: Change ends here -->
