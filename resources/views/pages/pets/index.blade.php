@@ -26,7 +26,7 @@
 
                 @if ($pet->status === 'adopted')
                     {{-- <div class="absolute inset-0 bg-white bg-opacity-70 z-10"></div> --}}
-                    <span class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full z-20">
+                    <span class="absolute top-2 right-2 bg-note text-white text-xs px-2 py-1 rounded-full z-20">
                         Adopted
                     </span>
                 @endif
@@ -39,14 +39,14 @@
                 <p class="text-gray-600">{{ $pet->breed }}</p>
                 @php
                     $statusColor = match ($pet->status) {
-                        'adopted' => 'text-red-500',
+                        'adopted' => 'text-note',
                         'pending' => 'text-yellow-500',
-                        default => 'text-green-500',
+                        default => 'text-primary',
                     };
                 @endphp
 
                 <p class="text-sm mt-2 font-medium {{ $statusColor }}">
-                    <span class="text-primary">Status:</span> {{ ucfirst($pet->status ?? 'available') }}
+                    <span class="text-black">Status:</span> {{ ucfirst($pet->status ?? 'available') }}
                 </p>
 
 
@@ -55,7 +55,7 @@
                         See more
                     </button>
                 @else
-                    <p class="mt-4 text-red-500 text-sm">This pet has been adopted</p>
+                    <p class="mt-4 text-note text-sm">This pet has been adopted</p>
                 @endif
             </div>
         @empty

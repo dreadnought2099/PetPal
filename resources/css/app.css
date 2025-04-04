@@ -26,7 +26,7 @@
         --color-primary: #49b451;
         --color-secondary: #a31621;
         --color-dark: #212121;
-        /* -color-hover: #9f444c; */
+        --color-note: #F7374F;
     }
 
     html {
@@ -51,6 +51,10 @@
         background-color: var(--color-secondary);
     }
 
+    .bg-note {
+        background-color: var(--color-note);
+    }
+
     .text-primary {
         color: var(--color-primary);
     }
@@ -61,6 +65,10 @@
 
     .text-dark {
         color: var(--color-dark);
+    }
+
+    .text-note {
+        color: var(--color-note);
     }
 
     .border-primary {
