@@ -19,11 +19,9 @@
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
         @forelse ($pets as $pet)
             <div
-                class="bg-white p-4 rounded-lg shadow-md relative border-1 border-primary
-                @if ($pet->status === 'adopted') opacity-75 cursor-not-allowed
-                @else
-                    hover:shadow-lg transition-shadow duration-200 @endif">
-
+            class="bg-white p-4 rounded-lg shadow-md relative border-1
+            @if ($pet->status === 'adopted') border-secondary opacity-75 cursor-not-allowed
+            @else hover:shadow-lg border-primary transition-shadow duration-200 cursor-pointer @endif">
                 @if ($pet->status === 'adopted')
                     {{-- <div class="absolute inset-0 bg-white bg-opacity-70 z-10"></div> --}}
                     <span class="absolute top-2 right-2 bg-note text-white text-xs px-2 py-1 rounded-full z-20">
