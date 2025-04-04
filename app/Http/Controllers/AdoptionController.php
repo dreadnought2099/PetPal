@@ -7,6 +7,7 @@ use App\Models\Pet;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -23,106 +24,117 @@ class AdoptionController extends Controller
 
 
     public function store(Request $request)
-{
-    Log::info('Adoption Request Data:', $request->all());
+    {
+        Log::info('Adoption Request Data:', $request->all());
 
-    try {
-        $validated = $request->validate([
-            'pet_id' => 'required|exists:pets,id',
-            'last_name' => 'required|string|max:255',
-            'first_name' => 'required|string|max:255',
-            'middle_name' => 'nullable|string|max:255',
-            'address' => 'required|string',
-            'contact_number' => 'required|string|max:20',
-            'dob' => 'required|date',
-            'valid_id' => 'required|file|mimes:jpeg,png,jpg,pdf|max:51200', 
-            'previous_experience' => 'required|in:yes,no',
-            'other_pets' => 'required|in:yes,no',
-            'financial_preparedness' => 'required|in:yes,no',
-        ]);
+        try {
+            $validated = $request->validate([
+                'pet_id' => 'required|exists:pets,id',
+                'last_name' => 'required|string|max:255',
+                'first_name' => 'required|string|max:255',
+                'middle_name' => 'nullable|string|max:255',
+                'address' => 'required|string',
+                'contact_number' => 'required|string|max:20',
+                'dob' => 'required|date',
+                'valid_id' => 'required|file|mimes:jpeg,png,jpg,pdf|max:51200',
+                'previous_experience' => 'required|in:yes,no',
+                'other_pets' => 'required|in:yes,no',
+                'financial_preparedness' => 'required|in:yes,no',
+            ]);
 
-        // Check if the pet is available for adoption
-        $pet = Pet::findOrFail($validated['pet_id']);
-        if ($pet->status === Pet::STATUS_ADOPTED) {
-            return back()->with('error', 'This pet has already been adopted.');
+            // Check pet availability
+            $pet = Pet::findOrFail($validated['pet_id']);
+
+            if (!$pet->isAvailableForAdoption()) {
+                return back()->with('error', 'This pet is not available for adoption.');
+            }
+
+            // Check for existing pending request
+            $existingRequest = Adoption::where('user_id', Auth::id())
+                ->where('pet_id', $validated['pet_id'])
+                ->where('status', 'pending')
+                ->first();
+
+            if ($existingRequest) {
+                return back()->with('error', 'You already have a pending adoption request for this pet.');
+            }
+
+            // File upload
+            if ($request->hasFile('valid_id')) {
+                $file = $request->file('valid_id');
+                $filename = time() . '-' . Str::slug($file->getClientOriginalName());
+                $path = $file->storeAs('adoption/valid_ids', $filename, 'public');
+                $validated['valid_id'] = $path;
+                Log::info('File stored at path', ['path' => $path]);
+            }
+
+            // Create adoption request
+            $adoptionRequest = Adoption::create([
+                'user_id' => Auth::id(),
+                'pet_id' => $validated['pet_id'],
+                'last_name' => $validated['last_name'],
+                'first_name' => $validated['first_name'],
+                'middle_name' => $validated['middle_name'],
+                'address' => $validated['address'],
+                'contact_number' => $validated['contact_number'],
+                'dob' => $validated['dob'],
+                'valid_id' => $validated['valid_id'],
+                'previous_experience' => $validated['previous_experience'],
+                'other_pets' => $validated['other_pets'],
+                'financial_preparedness' => $validated['financial_preparedness'],
+                'status' => 'pending',
+            ]);
+
+            // Update pet status to pending (not adopted yet!)
+            $pet->update(['status' => Pet::STATUS_PENDING]);
+
+            return redirect()->route('adopt.log')->with('success', "Adoption request submitted successfully!");
+        } catch (\Exception $e) {
+            Log::error("Adoption Request Error: " . $e->getMessage());
+            return back()->with('error', 'Failed to submit adoption request: ' . $e->getMessage());
         }
-
-        // Check if the user already has a pending adoption request for this pet
-        $existingRequest = Adoption::where('user_id', Auth::id())
-            ->where('pet_id', $validated['pet_id'])
-            ->where('status', 'pending')
-            ->first();
-
-        if ($existingRequest) {
-            return back()->with('error', 'You already have a pending adoption request for this pet.');
-        }
-
-        // File upload
-        if ($request->hasFile('valid_id')) {
-            Log::info('File uploaded', ['file' => $request->file('valid_id')->getClientOriginalName()]);
-
-            $file = $request->file('valid_id');
-            $filename = time() . '-' . $file->getClientOriginalName();
-            $path = $file->storeAs('adoption/valid_ids', $filename, 'public');
-            $validated['valid_id'] = $path;
-            Log::info('File stored at path', ['path' => $path]);
-        } else {
-            Log::warning('No file uploaded');
-        }
-
-        // Create adoption request
-        $adoptionRequest = Adoption::create([
-            'user_id' => Auth::id(),
-            'pet_id' => $validated['pet_id'],
-            'last_name' => $validated['last_name'],
-            'first_name' => $validated['first_name'],
-            'middle_name' => $validated['middle_name'],
-            'address' => $validated['address'],
-            'contact_number' => $validated['contact_number'],
-            'dob' => $validated['dob'],
-            'valid_id' => $validated['valid_id'],
-            'previous_experience' => $validated['previous_experience'],
-            'other_pets' => $validated['other_pets'],
-            'financial_preparedness' => $validated['financial_preparedness'],
-            'status' => 'pending',
-        ]);
-
-        // Update pet status to adopted
-        $pet->status = Pet::STATUS_ADOPTED;
-        $pet->save();
-
-        Log::info('Adoption request created', ['adoption_request_id' => $adoptionRequest->id]);
-
-        return redirect()->route('adopt.log')->with('success', "Adoption request (ID: {$adoptionRequest->id}) submitted successfully!");
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        Log::error("Validation failed: " . $e->getMessage());
-        return back()->with('error', 'Validation failed. Please check your input.');
-    } catch (\Exception $e) {
-        // Log the error
-        Log::error("Adoption Request Error: " . $e->getMessage());
-        return back()->with('error', 'Failed to submit adoption request. Please try again.');
     }
-}
-
-
 
     public function approve(Adoption $adoption)
     {
         $this->authorize('approve', $adoption);
-        $adoption->update(['status' => 'approved']);
 
-        return back()->with('success', 'Adoption request approved.');
+        DB::transaction(function () use ($adoption) {
+            // Update adoption status
+            $adoption->update(['status' => 'approved']);
+
+            // Update pet status
+            $adoption->pet->update(['status' => Pet::STATUS_ADOPTED]);
+
+            // Reject all other pending requests for this pet
+            Adoption::where('pet_id', $adoption->pet_id)
+                ->where('id', '!=', $adoption->id)
+                ->where('status', 'pending')
+                ->update(['status' => 'rejected']);
+        });
+
+        return back()->with('success', 'Adoption approved successfully!');
     }
-
 
     public function reject(Adoption $adoption)
     {
         $this->authorize('reject', $adoption);
-        $adoption->update(['status' => 'rejected']);
 
-        return back()->with('error', 'Adoption request rejected.');
+        DB::transaction(function () use ($adoption) {
+            $adoption->update(['status' => 'rejected']);
+
+            // If this was the only pending request, make pet available again
+            $hasOtherPending = Adoption::where('pet_id', $adoption->pet_id)
+                ->where('status', 'pending')
+                ->exists();
+
+            if (!$hasOtherPending) {
+                $adoption->pet->update(['status' => Pet::STATUS_AVAILABLE]);
+            }
+        });
+
+        return back()->with('success', 'Adoption request rejected.');
     }
-
 
     public function destroy(Adoption $adoption)
     {
@@ -188,11 +200,10 @@ class AdoptionController extends Controller
 
     public function update(Request $request, Adoption $adoption)
     {
-
         if (Auth::id() !== $adoption->user_id || $adoption->status !== 'pending') {
             abort(403, 'Unauthorized action.');
         }
-
+    
         $validated = $request->validate([
             'pet_id' => 'required|exists:pets,id',
             'last_name' => 'required|string|max:255',
@@ -205,16 +216,29 @@ class AdoptionController extends Controller
             'other_pets' => 'required|in:yes,no',
             'financial_preparedness' => 'required|in:yes,no',
         ]);
-
-        $adoption->fill($validated);
-
-        if ($adoption->isDirty()) {
-            $adoption->save();
-            return redirect()->route('adopt.log')->with('success', "Adoption request with ID {$adoption->id} updated successfully.");
-        }
-
-        return redirect()->route('adopt.log')->with('info', "No changes were made in ID {$adoption->id}.");
+    
+        DB::transaction(function () use ($adoption, $validated) {
+            //  Check if pet_id is being changed
+            if ($adoption->pet_id != $validated['pet_id']) {
+                //  Revert old pet's status to available
+                $adoption->pet->update(['status' => Pet::STATUS_AVAILABLE]);
+    
+                //  Update new pet's status to pending
+                $newPet = Pet::findOrFail($validated['pet_id']);
+                $newPet->update(['status' => Pet::STATUS_PENDING]);
+            }
+    
+            //  Apply validated data
+            $adoption->fill($validated);
+    
+            if ($adoption->isDirty()) {
+                $adoption->save();
+            }
+        });
+    
+        return redirect()->route('adopt.log')->with('success', "Adoption request with ID {$adoption->id} updated successfully.");
     }
+    
 
 
     public function create(Request $request)

@@ -16,9 +16,9 @@ class Pet extends Model
     const VACCINATION_PARTIAL = 1;
     const VACCINATION_FULL = 3;
 
-     // Species constants
-     const SPECIES_DOG = 0;
-     const SPECIES_CAT = 1;
+    // Species constants
+    const SPECIES_DOG = 0;
+    const SPECIES_CAT = 1;
 
     // Status constants
     const STATUS_AVAILABLE = 'available';
@@ -46,9 +46,10 @@ class Pet extends Model
         'species' => 'integer'
     ];
 
-     // Accessors for human-readable values
-    public function getVaccinationTextAttribute() {
-        return match($this->vaccination) {
+    // Accessors for human-readable values
+    public function getVaccinationTextAttribute()
+    {
+        return match ($this->vaccination) {
             self::VACCINATION_NONE => 'None',
             self::VACCINATION_PARTIAL => 'Partially',
             self::VACCINATION_FULL => 'Fully',
@@ -56,9 +57,10 @@ class Pet extends Model
         };
     }
 
-     // Accessors for human-readable values
-    public function getSpeciesTextAttribute() {
-        return match($this->species) {
+    // Accessors for human-readable values
+    public function getSpeciesTextAttribute()
+    {
+        return match ($this->species) {
             self::SPECIES_DOG => 'Dog',
             self::SPECIES_CAT => 'Cat',
             default => 'Unknown',
@@ -66,15 +68,17 @@ class Pet extends Model
     }
 
     // File URL Accessor
-    public function getProfilePhotoUrlAttribute() {
+    public function getProfilePhotoUrlAttribute()
+    {
         return $this->pet_profile_path
             ? asset('storage/' . $this->pet_profile_path)
             : asset('images/LRM_20240517_192913-01.jpeg'); // Default Profile Pic for Pets
     }
 
     // Auto-delete files when pet is deleted
-    protected static function boot() {
-        
+    protected static function boot()
+    {
+
         parent::boot();
 
         static::deleted(function ($pet) {
@@ -84,26 +88,30 @@ class Pet extends Model
         });
     }
 
-    // Scope to filter available pets
-    public function scopeAvailable($query) {
-        return $query->where('status', self::STATUS_AVAILABLE);
+    // Scope to filter available or pending pets (for adoption)
+    public function scopeAvailable($query)
+    {
+        return $query->whereIn('status', [self::STATUS_AVAILABLE, self::STATUS_PENDING]);
     }
 
 
     // Relationships
-    public function user() {
+    public function user()
+    {
 
         return $this->belongsTo(User::class);
     }
 
-    public function isAvailableForAdoption() {
-        return $this->status === self::STATUS_AVAILABLE;
+    // Check if the pet is available for adoption (including pending)
+    public function isAvailableForAdoption()
+    {
+        return $this->status === 'available' || $this->status === 'pending';
     }
 
-    public function markAsAdopted() {
-        
+    public function markAsAdopted()
+    {
+
         $this->status = self::STATUS_ADOPTED;
         $this->save();
     }
-
 }

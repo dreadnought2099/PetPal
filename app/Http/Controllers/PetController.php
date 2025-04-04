@@ -37,7 +37,14 @@ class PetController extends Controller
             'species' => 'sometimes|integer|in:0,1',
             'vaccination' => 'required|integer|in:0,1,3',
             'spayed_neutered' => 'sometimes|boolean',
+            'status' => 'sometimes|in:available,pending,adopted'
         ]);
+
+        // Set default status if not provided
+        if (!isset($validated['status'])) {
+            $validated['status'] = 'available'; // or 'pending'
+        }
+
         // Generate filename using the SUBMITTED name (not DB)
         if ($request->hasFile('profile')) {
             $file = $request->file('profile');

@@ -6,7 +6,7 @@
             Add a <span class="text-primary">Pet</span>
         </h2>
 
-        <form action="{{ route('pets.store') }}" method="POST" enctype="multipart/form-data" class="px-8 pt-6 pb-8 space-y-6">
+        <form action="{{ route('pets.store') }}" method="POST" onsubmit="this.querySelector('button[type=submit]').disabled = true;" enctype="multipart/form-data" class="px-8 pt-6 pb-8 space-y-6">
             @csrf
 
             {{-- Flash Messages --}}
@@ -57,7 +57,7 @@
                 <div class="relative">
                     <select name="{{ $name }}" class="{{ $inputClasses }}" required>
                         @foreach($options as $key => $value)
-                            <option value="{{ $key }}" {{ old($name) == $key ? 'selected' : '' }}>{{ $value }}</option>
+                            <option value="{{ $key }}" {{ old($name) == (int) $key ? 'selected' : '' }}>{{ $value }}</option>
                         @endforeach
                     </select>
                     <label class="{{ $labelClasses }}">{{ ucfirst($name) }}</label>

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('pets', function (Blueprint $table) {
             
-            $table->enum('status', ['available', 'adopted'])->default('available')->after('allergies');
+            $table->enum('status', ['available','pending','adopted'])->default('available')->after('allergies');
         });
     }
 
