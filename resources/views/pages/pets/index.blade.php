@@ -49,7 +49,7 @@
 
 
                 @if ($pet->status !== 'adopted')
-                    <button onclick='openModal(@json($pet))' class="mt-4 text-primary hover:underline">
+                    <button onclick='openModal(@json($pet))' class="mt-4 text-primary hover:underline cursor-pointer">
                         See more
                     </button>
                 @else

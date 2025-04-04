@@ -6,19 +6,23 @@
         <div class="relative w-full">
 
             {{-- Session Message --}}
-            <div id="success-message-container" class="absolute top-4 right-4 z-20">
+            <div id="success-message-container" class="absolute top-4 left-1/2 transform -translate-x-1/2 z-20">
                 @if (session('success') || session('info'))
                     <div id="message"
                         class="p-4 rounded-md shadow-lg border-l-4
-                        {{ session('success') ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
-                        {{ session('success') ?? session('info') }}
+                        {{ session('success') ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }} 
+                        transform opacity-0 transition-all duration-500 ease-in-out">
+                        <span>{{ session('success') ?? session('info') }}</span>
                     </div>
 
                     <script>
                         setTimeout(() => {
                             let messageDiv = document.getElementById('message');
                             if (messageDiv) {
-                                messageDiv.style.display = 'none';
+                                messageDiv.classList.add('opacity-0'); // Start fade out
+                                setTimeout(() => {
+                                    messageDiv.style.display = 'none'; // Remove after fade-out
+                                }, 500);
                             }
                         }, 4000);
                     </script>

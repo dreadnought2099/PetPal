@@ -42,14 +42,15 @@
                 $labelClasses =
                     'absolute cursor-text left-0 -top-3 text-sm text-gray-600 bg-white mx-1 px-1 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-primary peer-focus:text-sm peer-focus:bg-white peer-focus:px-2 peer-focus:rounded-md';
             @endphp
-
+            
             <div class="p-3 bg-gray-100 rounded-md">
                 <label class="font-semibold">Select Pet</label>
                 <select name="pet_id" id="petSelect" class="w-full border p-2 rounded mt-2" required>
                     <option value="" disabled {{ empty($selectedPet) ? 'selected' : '' }}>Choose a pet</option>
                     @foreach ($pets as $pet)
                         <option value="{{ $pet->id }}"
-                            {{ isset($selectedPet) && $selectedPet->id == $pet->id ? 'selected' : '' }}>
+                            {{ isset($selectedPet) && $selectedPet->id == $pet->id ? 'selected' : '' }}
+                            {{ $pet->status === 'adopted' ? 'disabled' : '' }}>
                             {{ $pet->name }} - {{ $pet->breed }}
                         </option>
                     @endforeach
