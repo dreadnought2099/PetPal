@@ -14,15 +14,18 @@
             </span>
         </h1>
         <p style="color: #333; font-size: 16px;">Welcome to our application. We're glad to have you on board!</p>
-        <p style="color: #333; font-size: 14px;">Before you start, please verify your email address by clicking the button below</p>
+        <p style="color: #333; font-size: 14px;">Before you start, please verify your email address by clicking the
+            button below</p>
 
-        <a href="{{ $verificationUrl }}" style="display:inline-block; padding:10px 20px; border-radius: 10px; background-color:#212121; color:#fff; text-decoration:none; font-weight:bold;">
+        <a href="{{ $verificationUrl }}"
+            style="display:inline-block; padding:10px 20px; border-radius: 10px; background-color:#212121; color:#fff; text-decoration:none; font-weight:bold;">
             Verify Email
         </a>
 
-        <p style="color: #333; font-size: 14px; margin-top: 20px;">If you didn’t create an account, disregard this email.</p>
+        <p style="color: #333; font-size: 14px; margin-top: 20px;">If you didn’t create an account, disregard this email.
+        </p>
         <p style="font-weight: bold;">Best regards,</p>
-        <p style="color: #49b451; font-weight: bold;">Admin</p>
+        <p style="color: #49b451; font-weight: bold;">{{ config('app.name') }}</p>
     </div>
 </body>
 
