@@ -22,7 +22,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'Administrator',
         ];
 
-         // Define permissions
+        // Define permissions
         $permissions = [
             'accept adoption request',
             'delete request',
@@ -48,28 +48,28 @@ class RolesAndPermissionsSeeder extends Seeder
         // Assign permissions to roles
         $rolePermissions = [
             'Adopter' => [
-                'request adoption', 
-                'view pets', 
+                'request adoption',
+                'view pets',
                 'adoption status'
             ],
 
             'Shelter' => [
-                'accept adoption request', 
-                'edit pet listing', 
+                'accept adoption request',
+                'edit pet listing',
                 'delete pet listing',
-                'delete request', 
-                'view pets', 
+                'delete request',
+                'view pets',
                 'adoption status'
             ],
 
             'Administrator' => [
-                'accept adoption request', 
-                'delete request', 
-                'delete user', 
-                'edit pet listing', 
+                'accept adoption request',
+                'delete request',
+                'delete user',
+                'edit pet listing',
                 'delete pet listing',
-                'change role', 
-                'view pets', 
+                'change role',
+                'view pets',
                 'adoption status'
             ]
         ];
@@ -99,6 +99,6 @@ class RolesAndPermissionsSeeder extends Seeder
     }
 }
 
-//  $user = App\Models\User::create([ 'name' => 'Adopter',  'email' => 'undefinedbusiness18@gmail.com',  'password' => bcrypt('iamadopter')]);
-//  $user = App\Models\User::create([ 'name' => 'Shelter',  'email' => 'skermart18@gmail.com',  'password' => bcrypt('iamshelter')]);
-//   $user = App\Models\User::create([ 'name' => 'Admin',  'email' => 'marjunmmagallanes@gmail.com',  'password' => bcrypt('iamadmin')]);
+$user = User::create(['name' => 'Adopter',  'email' => 'undefinedbusiness18@gmail.com',  'password' => bcrypt('iamadopter')]);
+$user = User::create(['name' => 'Shelter',  'email' => 'skermart18@gmail.com',  'password' => bcrypt('iamshelter')]);
+$user = User::create(['name' => 'Admin',  'email' => 'marjunmmagallanes@gmail.com',  'password' => bcrypt('iamadmin')]);

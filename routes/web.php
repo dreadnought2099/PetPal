@@ -92,9 +92,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/adopt', [AdoptionController::class, 'index'])->name('adopt.index');
         Route::post('/adopt/request', [AdoptionController::class, 'store'])->name('adopt.store');
         Route::get('/adopt/log', [AdoptionController::class, 'adoptionLog'])->name('adopt.log');
-        Route::get('/adoption/apply', [AdoptionController::class, 'create'])->name('adoption.apply');
-        Route::put('/adopt/{adoption}', [AdoptionController::class, 'update'])->name('adopt.update'); 
+        Route::get('/adopt/apply/{pet}', [AdoptionController::class, 'create'])->name('adopt.apply');
+        Route::put('/adopt/{adoption}', [AdoptionController::class, 'update'])->name('adopt.update');
         Route::get('/adopt/{adoption}/edit', [AdoptionController::class, 'edit'])->name('adopt.edit');
-        Route::delete('/adopt/{adoption}', [AdoptionController::class, 'destroy'])->name('adopt.destroy'); 
+        Route::delete('/adopt/{adoption}', [AdoptionController::class, 'destroy'])->name('adopt.destroy');
     });
 });

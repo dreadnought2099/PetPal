@@ -10,23 +10,22 @@
 @theme {
     --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-        "Noto Color Emoji";    
+        "Noto Color Emoji";
 }
 
 @font-face {
-    font-family: 'Baloo';
-    src: url('/fonts/Baloo-Regular.ttf') format('truetype');
+    font-family: "Baloo";
+    src: url("/fonts/Baloo-Regular.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
-
 
 @layer base {
     :root {
         --color-primary: #49b451;
         --color-secondary: #a31621;
         --color-dark: #212121;
-        --color-note: #F7374F;
+        --color-note: #f7374f;
     }
 
     html {
@@ -34,11 +33,11 @@
     }
 
     body {
-        font-family: 'Baloo', sans-serif;
+        font-family: "Baloo", sans-serif;
     }
 }
 
-@layer utilities {    
+@layer utilities {
     .bg-primary {
         background-color: var(--color-primary);
     }
@@ -112,18 +111,15 @@
         color: var(--color-dark);
     }
 
-  
-    .focus\:ring-primary:focus { 
+    .focus\:ring-primary:focus {
         --tw-ring-color: var(--color-primary);
-        box-shadow: 0 0 0 1px var(--tw-ring-color); 
-    } 
-
+        box-shadow: 0 0 0 1px var(--tw-ring-color);
+    }
 
     .focus\:border-primary:focus {
         border-color: var(--color-primary);
     }
 
-   
     .peer:focus ~ label {
         color: var(--color-primary);
     }
@@ -142,7 +138,6 @@
     .hover-underline:hover::after {
         @apply left-0 w-full;
     }
-
 
     /* For Hyperlinks */
     .hover-underline-hyperlink {

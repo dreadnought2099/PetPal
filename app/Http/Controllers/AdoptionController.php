@@ -173,10 +173,9 @@ class AdoptionController extends Controller
 
     public function adoptionLog()
     {
-
         $user = Auth::user();
 
-        if ($user->hasRole('Adopter')) {
+        if ($user->role === 'Adopter') {
             $adoptions = Adoption::where('user_id', $user->id)->get();
         } else {
             $adoptions = Adoption::all();
@@ -203,7 +202,7 @@ class AdoptionController extends Controller
         if (Auth::id() !== $adoption->user_id || $adoption->status !== 'pending') {
             abort(403, 'Unauthorized action.');
         }
-    
+
         $validated = $request->validate([
             'pet_id' => 'required|exists:pets,id',
             'last_name' => 'required|string|max:255',
@@ -216,35 +215,35 @@ class AdoptionController extends Controller
             'other_pets' => 'required|in:yes,no',
             'financial_preparedness' => 'required|in:yes,no',
         ]);
-    
+
         DB::transaction(function () use ($adoption, $validated) {
             //  Check if pet_id is being changed
             if ($adoption->pet_id != $validated['pet_id']) {
                 //  Revert old pet's status to available
                 $adoption->pet->update(['status' => Pet::STATUS_AVAILABLE]);
-    
+
                 //  Update new pet's status to pending
                 $newPet = Pet::findOrFail($validated['pet_id']);
                 $newPet->update(['status' => Pet::STATUS_PENDING]);
             }
-    
+
             //  Apply validated data
             $adoption->fill($validated);
-    
+
             if ($adoption->isDirty()) {
                 $adoption->save();
             }
         });
-    
+
         return redirect()->route('adopt.log')->with('success', "Adoption request with ID {$adoption->id} updated successfully.");
     }
-    
 
 
-    public function create(Request $request)
+
+    public function create($pet)
     {
-        $selectedPet = $request->input('pet_id') ? Pet::find($request->input('pet_id')) : null;
-        $pets = Pet::all(); // Fetch all available pets
+        $selectedPet = Pet::find($pet);
+        $pets = Pet::all();
 
         return view('pages.adoptions.index', compact('pets', 'selectedPet'));
     }

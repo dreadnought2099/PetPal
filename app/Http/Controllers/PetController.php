@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Pet;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class PetController extends Controller
 {
@@ -26,19 +27,25 @@ class PetController extends Controller
     public function store(Request $request)
     {
 
-        $validated = $request->validate([
-            'name' => 'required|string|max:100',
-            'age' => 'required|integer|min:0|max:50',
-            'breed' => 'required|string|max:100',
-            'allergies' => 'nullable|string',
-            'description' => 'nullable|string',
-            'profile' => 'nullable|image|max:51200',
-            'sex' => 'sometimes|in:M,F',
-            'species' => 'sometimes|integer|in:0,1',
-            'vaccination' => 'required|integer|in:0,1,3',
-            'spayed_neutered' => 'sometimes|boolean',
-            'status' => 'sometimes|in:available,pending,adopted'
-        ]);
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:100',
+                'age' => 'required|integer|min:0|max:50',
+                'breed' => 'required|string|max:100',
+                'allergies' => 'nullable|string',
+                'description' => 'nullable|string',
+                'profile' => 'nullable|image|max:51200',
+                'sex' => 'required',
+                'species' => 'required',
+                'vaccination' => 'required',
+                'spayed_neutered' => 'required',
+                'status' => 'sometimes|in:available,pending,adopted'
+            ]);
+        } catch (Exception $e) {
+            dd($e);
+        }
+
+
 
         // Set default status if not provided
         if (!isset($validated['status'])) {
@@ -54,7 +61,7 @@ class PetController extends Controller
             $validated['pet_profile_path'] = $path; // Save path to DB
         }
 
-        $validated['user_id'] = auth()->id();
+        $validated['user_id'] = Auth::user()->id;
 
         try {
             $pet = Pet::create($validated);
@@ -70,7 +77,7 @@ class PetController extends Controller
         $pet = Pet::findOrFail($id);
 
         // Check if the user has permission to delete the pet listing
-        if (!auth()->user()->can('delete pet listing')) {
+        if (!Auth::user()->can('delete pet listing')) {
             abort(403, 'Unauthorized action');
         }
 
@@ -86,7 +93,7 @@ class PetController extends Controller
         $pet = Pet::findOrFail($id);
 
         // Check if the user has permission to edit the pet listing
-        if (!auth()->user()->can('edit pet listing')) {
+        if (!Auth::user()->can('edit pet listing')) {
             abort(403, 'Unauthorized action');
         }
 
@@ -103,6 +110,8 @@ class PetController extends Controller
             'vaccination' => 'required|integer|in:0,1,3',
             'spayed_neutered' => 'sometimes|boolean',
         ]);
+
+
 
         // Handle the profile image upload if provided
         if ($request->hasFile('profile')) {
@@ -130,7 +139,7 @@ class PetController extends Controller
         $pet = Pet::findOrFail($id);
 
         // Check if the user has permission to edit the pet listing
-        if (!auth()->user()->can('edit pet listing')) {
+        if (!Auth::user()->can('edit pet listing')) {
             abort(403, 'Unauthorized action');
         }
 

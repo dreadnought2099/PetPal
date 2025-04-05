@@ -14,26 +14,9 @@
             </span>
         </h1>
 
-        {{-- Session Message --}}
-        <div id="success-message-container" class="absolute top-24 right-4 z-10">
-            @if (session('success') || session('error'))
-                <div id="message"
-                    class="p-3 rounded-md shadow-lg border-l-4
-                  {{ session('success') ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
-                    {{ session('success') ?? session('error') }}
-                </div>
 
-                <script>
-                    setTimeout(() => {
-                        let messageDiv = document.getElementById('message');
-                        if (messageDiv) {
-                            messageDiv.style.display = 'none';
-                        }
-                    }, 4000);
-                </script>
-            @endif
-        </div>
-        <form action="{{ route('adopt.store') }}" method="POST" enctype="multipart/form-data" class="rounded-lg px-8 pt-6 pb-8 mb-4 space-y-6 z-9">
+        <form action="{{ route('adopt.store') }}" method="POST" enctype="multipart/form-data"
+            class="rounded-lg px-8 pt-6 pb-8 mb-4 space-y-6 z-9">
             @csrf
 
             @php
@@ -42,7 +25,7 @@
                 $labelClasses =
                     'absolute cursor-text left-0 -top-3 text-sm text-gray-600 bg-white mx-1 px-1 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-primary peer-focus:text-sm peer-focus:bg-white peer-focus:px-2 peer-focus:rounded-md';
             @endphp
-            
+
             <div class="p-3 bg-gray-100 rounded-md">
                 <label class="font-semibold">Select Pet</label>
                 <select name="pet_id" id="petSelect" class="w-full border p-2 rounded mt-2" required>
@@ -65,18 +48,16 @@
                     <label class="{{ $labelClasses }}">{{ $label }}</label>
                 </div>
             @endforeach
-            
+
             <div class="relative bg-inherit">
                 <label class="{{ $labelClasses }}">Upload Valid ID (JPEG, PNG, JPG, PDF)</label>
-                <input type="file" name="valid_id"
-                    class="{{ $inputClasses }}"
-                    accept=".jpeg,.png,.jpg,.pdf" required>
+                <input type="file" name="valid_id" class="{{ $inputClasses }}" accept=".jpeg,.png,.jpg,.pdf" required>
             </div>
             @if ($errors->has('valid_id'))
                 <p class="text-red-500 text-xs mt-1">{{ $errors->first('valid_id') }}</p>
             @endif
-            
-            
+
+
             @php
                 $questions = [
                     'previous_experience' => 'Do you have previous pet ownership experience?',
