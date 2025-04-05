@@ -185,17 +185,14 @@
                 <p id="alreadyAdoptedMsg" class=" text-red-500 mt-2 text-sm"></p>
 
                 <div class="flex p-2 w-full">
-
-                    @hasrole('Adopter')
+                    @if (auth()->guest() || auth()->user()->hasRole('Adopter'))
                         <a href="{{ route('adopt.apply', $pet->id) }}"
                             class="w-full px-4 py-2 bg-primary text-white text-sm font-semibold rounded-md
-                    hover:bg-white hover:text-primary border border-transparent hover:border-primary transition duration-300 ease-in-out">
+                       hover:bg-white hover:text-primary border border-transparent hover:border-primary transition duration-300 ease-in-out">
                             Adopt Now
                         </a>
-                    @endhasrole
+                    @endif
                 </div>
-
-
             </div>
         </div>
     @endforeach
