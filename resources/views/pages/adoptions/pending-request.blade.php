@@ -4,16 +4,6 @@
 <div class="container mx-auto mt-4">
     <h1 class="text-2xl font-bold mb-6">Pending Adoption Requests</h1>
 
-    @if(session('success'))
-        <div class="alert alert-success bg-green-500 text-white p-4 mb-4 rounded">
-            {{ session('success') }}
-        </div>
-    @elseif(session('error'))
-        <div class="alert alert-error bg-red-500 text-white p-4 mb-4 rounded">
-            {{ session('error') }}
-        </div>
-    @endif
-
     <!-- Table to display adoption requests -->
     <table class="min-w-full table-auto border-collapse">
         <thead>

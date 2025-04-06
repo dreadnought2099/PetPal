@@ -87,7 +87,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // Adopter
-    Route::middleware(['auth', 'role:Adopter'])->group(function () {
+    Route::middleware(['role:Adopter'])->group(function () {
 
         Route::get('/adopt', [AdoptionController::class, 'index'])->name('adopt.index');
         Route::post('/adopt/request', [AdoptionController::class, 'store'])->name('adopt.store');

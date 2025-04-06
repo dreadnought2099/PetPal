@@ -175,9 +175,11 @@ class AdoptionController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role === 'Adopter') {
+        if ($user->hasRole('Adopter')) {
+            // Only show the adoption records for the current Adopter
             $adoptions = Adoption::where('user_id', $user->id)->get();
         } else {
+            // For Shelter and Admin roles, show all adoptions
             $adoptions = Adoption::all();
         }
 
