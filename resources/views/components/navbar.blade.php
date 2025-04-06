@@ -45,6 +45,13 @@
                                 </a>
                             </li>
                         @endif
+                        @if (auth()->check() && auth()->user()->hasRole('Administrator'))
+                            <li>
+                                <a href="{{ route('admin.dashboard') }}"
+                                class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Dashboard
+                            </a>
+                            </li>
+                        @endif
                         <li>
                             <a href="{{ route('settings.index') }}"
                                 class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Settings</a>

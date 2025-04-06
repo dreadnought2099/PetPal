@@ -67,8 +67,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
         // User Management
-        Route::delete('/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
-        Route::put('/users/{id}/role', [AdminController::class, 'changeRole'])->name('admin.changeRole');
+        Route::delete('/admin/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
+        Route::post('/admin/users/{id}/role', [AdminController::class, 'changeRole'])->name('admin.changeRole');
     });
 
     // Shelter & Administrator

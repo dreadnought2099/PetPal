@@ -99,6 +99,6 @@ class RolesAndPermissionsSeeder extends Seeder
     }
 }
 
-$user = User::create(['name' => 'Adopter',  'email' => 'undefinedbusiness18@gmail.com',  'password' => bcrypt('iamadopter')]);
-$user = User::create(['name' => 'Shelter',  'email' => 'skermart18@gmail.com',  'password' => bcrypt('iamshelter')]);
-$user = User::create(['name' => 'Admin',  'email' => 'marjunmmagallanes@gmail.com',  'password' => bcrypt('iamadmin')]);
+// $user = User::create(['name' => 'Adopter',  'email' => 'undefinedbusiness18@gmail.com',  'password' => bcrypt('iamadopter')]);
+// $user = User::create(['name' => 'Shelter',  'email' => 'skermart18@gmail.com',  'password' => bcrypt('iamshelter')]);
+// $user = User::create(['name' => 'Admin',  'email' => 'marjunmmagallanes@gmail.com',  'password' => bcrypt('iamadmin')]);

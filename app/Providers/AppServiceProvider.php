@@ -43,5 +43,9 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('delete-adoption', function ($user, $adoption) {
             return $user->id === $adoption->user_id && $adoption->status === 'pending';
         });
+
+        Gate::define('change-role', function($user) {
+            return $user->hasPermissionTo('change role');
+        });
     }
 }
