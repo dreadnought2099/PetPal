@@ -45,7 +45,7 @@
                         See more
                     </button>
                 @else
-                    <p class="mt-4 text-note text-sm">This pet has been adopted</p>
+                    <p class="mt-4 text-note text-sm">{{ $pet->name }} has been adopted</p>
                 @endif
             </div>
         @empty

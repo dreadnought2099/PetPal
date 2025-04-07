@@ -1,0 +1,14 @@
+{
+    "about": {
+      "content": [
+        "PetPal is a digital pet adoption platform designed to bridge the gap between animal shelters and potential pet adopters. The platform aims to streamline the adoption process, promote awareness of shelters and offer essential data that promotes responsible pet ownership."
+      ]
+    },
+
+    "problem": {
+        "content": [
+            "Due to low visibility, poor adoption request processing, and the absence of a centralized platform for pet postings, many animal shelters experience low adoption rates. As a result, overcrowding in shelters often leads to euthanasia especially for pets that remain unadopted for extended periods. On the other side, conflicting information and confusing adoption procedures make it difficult for new owners to identify appropriate pets. Furthermore, shelters frequently lack the digital tools necessary to effectively manage pet profiles and monitor adoption statuses."
+        ]
+    }
+  }
+  

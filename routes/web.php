@@ -15,8 +15,16 @@ use App\Http\Controllers\SettingsController;
 use Illuminate\Auth\Notifications\ResetPassword;
 
 Route::get('/', function () {
-    return view('home');
+    return view('pages.home');
 })->name('home');
+
+Route::get('/about', function() {
+    return view('pages.about');
+})->name('about');
+
+Route::get('/contact', function() {
+    return view('pages.contact');
+})->name('contact');
 
 Auth::routes(['verify' => true]);
 
