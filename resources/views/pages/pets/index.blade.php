@@ -112,8 +112,10 @@
                 </div>
 
                 <div class="p-2">
-                    <p class="mt-3"><strong>Description:</strong></p>
-                    <p class="border p-2 rounded bg-gray-50">{{ $pet->description }}</p>
+                    <p class="mt-3 font-semibold">Description:</p>
+                    <p class="border p-2 rounded bg-gray-50 text-sm break-words max-h-40 overflow-auto">
+                        {{ $pet->description }}
+                    </p>
                 </div>
 
                 <div class="flex justify-between p-2 w-full">
@@ -128,10 +130,13 @@
                         onsubmit="return confirm('Are you sure you want to delete pet {{ $pet->name }}?');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit"
-                            class="bg-red-500 text-white px-4 py-2 rounded hover:bg-white border hover:border-secondary hover:text-secondary transition-colors cursor-pointer">
-                            Delete
-                        </button>
+                        @can('delete pet listing')
+                            <button type="submit"
+                                class="bg-red-500 text-white px-4 py-2 rounded hover:bg-white border hover:border-secondary hover:text-secondary transition-colors cursor-pointer">
+                                Delete
+                            </button>
+                        @endcan
+
                     </form>
                 </div>
 

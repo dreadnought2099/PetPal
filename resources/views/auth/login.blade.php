@@ -1,62 +1,53 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="w-screen h-screen flex flex-col justify-start items-center bg-gray-200 pt-32">
-        <form action="{{ route('login') }}" method="POST"
-            class="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm border border-primary space-y-8">
-            @csrf
-            <h2 class="text-2xl font-bold text-dark text-center mb-6">Log <span class="text-primary">in</span></h2>
+<div class="min-h-screen w-full flex justify-center items-center px-4 py-6">
+    <form action="{{ route('login') }}" method="POST"
+        class="bg-white w-[90%] max-w-xs p-4 rounded-lg shadow-lg border border-primary space-y-4">
+        @csrf
 
-            <div class="h-[30px] flex items-center justify-center">
-                @if (session('error'))
-                    <div class="bg-red-100 border-l-4 border-secondary text-secondary p-3 rounded-md">
-                        {{ session('error') }}
-                    </div>
-                @elseif (session('success'))
-                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-2 rounded-md w-full text-center">
-                        {{ session('success') }}
-                    </div>
-                @endif
+        <h2 class="text-xl font-bold text-dark text-center">Log <span class="text-primary">in</span></h2>
+
+        {{-- Flash Messages --}}
+        @if (session('error'))
+            <div class="bg-red-100 border-l-4 border-secondary text-secondary p-2 rounded-md text-xs text-center">
+                {{ session('error') }}
             </div>
-
-            <div class="relative bg-inherit">
-                <input type="email" id="email" name="email" placeholder="email" required
-                    class="peer bg-transparent py-3 w-full rounded-md text-gray-700 placeholder-transparent ring-1 px-4 ring-gray-400 focus:ring-2 focus:ring-primary focus:border-primary outline-none">
-                <label for="email"
-                    class="absolute cursor-text left-0 -top-3 text-sm text-gray-600 bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-primary peer-focus:text-sm transition-all">
-                    Email
-                </label>
+        @elseif (session('success'))
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-2 rounded-md text-xs text-center">
+                {{ session('success') }}
             </div>
+        @endif
 
-            <div class="relative bg-inherit">
-                <input type="password" id="password" name="password" placeholder="password" required
-                    class="peer bg-transparent py-3 w-full rounded-md text-gray-700 placeholder-transparent ring-1 px-4 ring-gray-400 focus:ring-2 focus:ring-primary focus:border-primary outline-none">
-                <label for="password"
-                    class="absolute cursor-text left-0 -top-3 text-sm text-gray-600 bg-inherit mx-1 px-1 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-primary peer-focus:text-sm">
-                    Password
-                </label>
-            </div>
+        {{-- Input + Label Shared Classes --}}
+        @php
+            $inputClasses = 'peer bg-transparent py-2 w-full rounded-md text-gray-700 placeholder-transparent ring-1 px-3 ring-gray-400 focus:ring-2 focus:ring-primary focus:border-primary outline-none';
+            $labelClasses = 'absolute cursor-text left-0 -top-3 text-sm text-gray-600 bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-primary peer-focus:text-sm transition-all';
+        @endphp
 
-            <div class="relative bg-inherit flex justify-end">
-                <a href="{{ route('password.request') }}" class="hover-underline-hyperlink">Forgot your password?</a>
-            </div>
+        <div class="relative">
+            <input type="email" id="email" name="email" placeholder="Email" required class="{{ $inputClasses }}">
+            <label for="email" class="{{ $labelClasses }}">Email</label>
+        </div>
 
-            @php
-                $buttonClass =
-                    'mt-2 w-full bg-primary hover:bg-white hover:text-primary border-1 hover:border-primary text-white font-medium py-2 rounded-lg transition duration-300';
-            @endphp
+        <div class="relative">
+            <input type="password" id="password" name="password" placeholder="Password" required class="{{ $inputClasses }}">
+            <label for="password" class="{{ $labelClasses }}">Password</label>
+        </div>
 
-            <div class="flex flex-col items-center gap-3">
-                <button type="submit" class="{{ $buttonClass }}">
-                    Log in
-                </button>
-                <a href="{{ route('register') }}">
-                    <span class="text-primary text-[16px]">or</span>
-                    <span class="hover-underline-hyperlink text-[16px]">
-                        Register
-                    </span>
-                </a>
-            </div>
-        </form>
-    </div>
+        <div class="text-right">
+            <a href="{{ route('password.request') }}" class="text-xs text-primary hover:underline">Forgot your password?</a>
+        </div>
+
+        <button type="submit"
+            class="w-full bg-primary text-white font-medium py-2 rounded-lg transition hover:bg-white hover:text-primary border hover:border-primary">
+            Log in
+        </button>
+
+        <div class="text-center text-xs pt-1">
+            <span class="text-gray-500">Don't have an account?</span>
+            <a href="{{ route('register') }}" class="text-primary hover:underline ml-1">Register</a>
+        </div>
+    </form>
+</div>
 @endsection
