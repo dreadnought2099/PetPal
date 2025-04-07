@@ -36,23 +36,25 @@ class PetController extends Controller
                 'description' => 'nullable|string',
                 'profile' => 'nullable|image|max:51200',
                 'sex' => 'required',
-                'species' => 'required',
-                'vaccination' => 'required',
+                'species' => 'required|in:' . implode(',', [Pet::SPECIES_DOG, Pet::SPECIES_CAT]),
+                'vaccination' => 'required|in:' . implode(',', [Pet::VACCINATION_NONE, Pet::VACCINATION_PARTIAL, Pet::VACCINATION_FULL]),
                 'spayed_neutered' => 'required',
                 'status' => 'sometimes|in:available,pending,adopted'
             ]);
+
+            // Explicitly cast species and vaccination to integers
+            $validated['species'] = (int) $validated['species'];
+            $validated['vaccination'] = (int) $validated['vaccination'];
         } catch (Exception $e) {
-            dd($e);
+            dd($e); // Remove or handle exceptions in production
         }
-
-
 
         // Set default status if not provided
         if (!isset($validated['status'])) {
-            $validated['status'] = 'available'; // or 'pending'
+            $validated['status'] = 'available';
         }
 
-        // Generate filename using the SUBMITTED name (not DB)
+        // Handle file upload for profile image
         if ($request->hasFile('profile')) {
             $file = $request->file('profile');
             $cleanPetName = Str::slug($validated['name']); // "Fluffy Cat!" -> "fluffy-cat"
@@ -89,7 +91,7 @@ class PetController extends Controller
 
     public function update(Request $request, $id)
     {
-
+        // dd($request->all());
         $pet = Pet::findOrFail($id);
 
         // Check if the user has permission to edit the pet listing
@@ -107,10 +109,17 @@ class PetController extends Controller
             'profile' => 'nullable|image|max:51200',
             'sex' => 'sometimes|in:M,F',
             'species' => 'sometimes|integer|in:0,1',
-            'vaccination' => 'required|integer|in:0,1,3',
+            'vaccination' => 'required|integer|in:0,1,2',
             'spayed_neutered' => 'sometimes|boolean',
         ]);
 
+        // Explicitly cast species and vaccination to integers
+        if (isset($validated['species'])) {
+            $validated['species'] = (int) $validated['species'];
+        }
+        if (isset($validated['vaccination'])) {
+            $validated['vaccination'] = (int) $validated['vaccination'];
+        }
 
 
         // Handle the profile image upload if provided
@@ -125,12 +134,12 @@ class PetController extends Controller
         try {
             // Update the pet with validated data
             $pet->update($validated);
-            return redirect()->route('pets.index')->with('success', 'Pet listing updated successfully.');
+            return redirect()->route('pets.index')->with('success', "{$pet->name} updated successfully.");
         } catch (Exception $e) {
             return redirect()->route('pets.index')->with('error', 'Failed to update pet: ' . $e->getMessage());
         }
 
-        return redirect()->route('pets.index')->with('success', 'Pet listing updated successfully.');
+        return redirect()->route('pets.index')->with('success', "{$pet->name} updated successfully.");
     }
 
     public function edit($id)

@@ -19,8 +19,8 @@ return new class extends Migration
             $table->text('allergies')->nullable();
             $table->string('pet_profile_path')->nullable();
             $table->enum('sex', ['M', 'F'])->nullable(false);
-            $table->enum('species', ['Dog', 'Cat'])->nullable(false);
-            $table->tinyInteger('vaccination')->unisgned()->nullable(false);
+            $table->unsignedInteger('species')->nullable(false);
+            $table->unsignedInteger('vaccination')->nullable(false);
             $table->boolean('spayed_neutered')->nullable(false)->default(false);
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();

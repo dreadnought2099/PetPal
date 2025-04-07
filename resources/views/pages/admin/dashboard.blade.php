@@ -36,7 +36,7 @@
                                     @csrf
                                     <input type="hidden" name="role" id="role-{{ $user->id }}"
                                         value="{{ $user->roles->first() ? $user->roles->first()->name : '' }}">
-                                    <select name="role" class="border rounded px-2 py-1 text-sm"
+                                    <select name="role" class="border rounded px-2 py-1 text-sm cursor-pointer"
                                         onchange="handleRoleChange(event, {{ $user->id }})">
                                         @foreach ($roles as $role)
                                             <option value="{{ $role->name }}"

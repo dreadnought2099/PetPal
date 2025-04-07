@@ -14,7 +14,7 @@ class Pet extends Model
     // Vaccination status constants
     const VACCINATION_NONE = 0;
     const VACCINATION_PARTIAL = 1;
-    const VACCINATION_FULL = 3;
+    const VACCINATION_FULL = 2;
 
     // Species constants
     const SPECIES_DOG = 0;
@@ -105,7 +105,7 @@ class Pet extends Model
     // Check if the pet is available for adoption (including pending)
     public function isAvailableForAdoption()
     {
-        return $this->status === 'available' || $this->status === 'pending';
+        return $this->status === self::STATUS_AVAILABLE || $this->status === self::STATUS_PENDING;
     }
 
     public function markAsAdopted()

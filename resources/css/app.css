@@ -28,6 +28,11 @@
         --color-note: #f7374f;
     }
 
+    ::selection {
+        background-color: #49b451;
+        color: white;
+    }
+
     html {
         scroll-behavior: smooth;
     }

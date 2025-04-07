@@ -21,7 +21,7 @@
             <div x-data="{ open: false }" class="relative z-20">
                 <!-- Dropdown Button -->
                 <button @click="open = !open"
-                    class="flex items-center space-x-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+                    class="flex items-center space-x-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 cursor-pointer">
                     <span class="text-gray-700">{{ Auth::user()->name ?? 'Guest' }}</span>
                     <svg class="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
