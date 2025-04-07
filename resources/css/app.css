@@ -164,13 +164,13 @@
         @apply relative inline-block;
     }
 
-    .hover-underline-hyperlink::after {
+    .hover-underline-hyperlink-secondary::after {
         content: "";
         @apply absolute left-1/2 bottom-0 w-0 h-0.5 transition-all duration-500 ease-in-out;
         background-color: var(--color-secondary);
     }
 
-    .hover-underline-hyperlink:hover::after {
+    .hover-underline-hyperlink-secondary:hover::after {
         @apply left-0 w-full;
     }
 }

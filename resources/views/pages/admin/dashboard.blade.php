@@ -49,8 +49,10 @@
                             </td>
                             <td class="py-3 px-4 text-sm text-gray-700">
                                 <!-- Delete Button Trigger -->
-                                <button onclick="confirmDelete({{ $user->id }})"
-                                    class="text-red-600 hover-underline-hyperlink hover:text-secondary transition duration-300 cursor-pointer">Delete</button>
+                                <button onclick="confirmDelete({{ $user->id }})" title="Delete User"
+                                    class="hover-underline-hyperlink-secondary hover:text-secondary transition duration-300 cursor-pointer">
+                                    <img src="icon/trash-solid.svg" alt="Delete" class="w-5 h-5">
+                                </button>
 
                                 <!-- Delete Form -->
                                 <form id="deleteUserForm-{{ $user->id }}" method="POST"
@@ -72,8 +74,10 @@
     <div class="bg-white p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
         <p id="modalMessage" class="mb-4 text-lg font-semibold text-gray-800"></p>
         <div class="flex space-x-4">
-            <button id="confirmButton" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">Yes</button>
-            <button onclick="closeModal()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition duration-300">Cancel</button>
+            <button id="confirmButton"
+                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">Yes</button>
+            <button onclick="closeModal()"
+                class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition duration-300">Cancel</button>
         </div>
     </div>
 </div>
