@@ -51,7 +51,7 @@
 
             <div class="text-center">
                 <span class="text-primary">or</span>
-                <a href="{{ route('login') }}" class="hover-underline-hyperlink">Back to Login</a>
+                <a href="{{ route('login') }}" class="text-dark hover:text-primary hover-underline-hyperlink">Back to Login</a>
             </div>
         </form>
     </div>

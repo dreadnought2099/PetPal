@@ -36,7 +36,7 @@
         </div>
 
         <div class="text-right">
-            <a href="{{ route('password.request') }}" class="text-xs text-primary hover:underline">Forgot your password?</a>
+            <a href="{{ route('password.request') }}" class="text-xs text-dark hover:text-primary hover-underline-hyperlink">Forgot your password?</a>
         </div>
 
         <button type="submit"
@@ -46,7 +46,7 @@
 
         <div class="text-center text-xs pt-1">
             <span class="text-gray-500">Don't have an account?</span>
-            <a href="{{ route('register') }}" class="text-primary hover:underline ml-1">Register</a>
+            <a href="{{ route('register') }}" class="text-dark hover:text-primary hover-underline-hyperlink ml-1">Register</a>
         </div>
     </form>
 </div>

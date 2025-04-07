@@ -44,7 +44,7 @@
 
             <div class="text-center text-xs pt-1">
                 <span class="text-gray-500">Already have an account?</span>
-                <a href="{{ route('login') }}" class="text-primary hover:underline ml-1">Log in</a>
+                <a href="{{ route('login') }}" class="text-dark hover:text-primary hover-underline-hyperlink ml-1">Log in</a>
             </div>
         </div>
     </form>
