@@ -2,7 +2,8 @@
 
 @section('content')
 
-    @php$selectedPet = $selectedPet ?? null;
+    @php
+        $selectedPet = $selectedPet ?? null;
         $pets = $pets ?? collect();
     @endphp
 
@@ -56,12 +57,58 @@
             @foreach (['last_name' => 'Last Name', 'first_name' => 'First Name', 'middle_name' => 'Middle Name', 'address' => 'Address', 'contact_number' => 'Contact Number', 'dob' => 'Date of Birth'] as $name => $label)
                 <div class="relative bg-inherit">
                     <input type="{{ $name == 'dob' ? 'date' : 'text' }}" name="{{ $name }}"
-                        value="{{ old($name, $adoption->$name) }}"
-                        class="{{ $inputClasses }}" {{ $name !== 'middle_name' ? 'required' : '' }}
-                        placeholder="{{ $label }}" value="{{ old($name) }}">
+                        value="{{ old($name, $adoption->$name) }}" class="{{ $inputClasses }}"
+                        {{ $name !== 'middle_name' ? 'required' : '' }} placeholder="{{ $label }}"
+                        value="{{ old($name) }}">
                     <label class="{{ $labelClasses }}">{{ $label }}</label>
                 </div>
             @endforeach
+
+            <div class="mb-4">
+                <div class="relative bg-inherit">
+                    <input type="file" id="valid_id" name="valid_id" class="{{ $inputClasses }}"
+                        accept=".jpeg,.png,.jpg,.pdf" required>
+                    <label for="valid_id" class="{{ $labelClasses }}">Upload Valid ID (JPEG, PNG, JPG, PDF)</label>
+                    @if ($adoption->valid_id)
+                        <img src="{{ Storage::url($adoption->valid_id) }}" alt="Valid ID"
+                            class="mt-2 w-32 h-32 object-cover rounded-md cursor-pointer"
+                            onclick="showImageModal('{{ Storage::url($adoption->valid_id) }}')">
+                    @endif
+
+                </div>
+            </div>
+
+            <div id="image-modal" class="hidden fixed inset-0 flex items-center justify-center z-50 p-6 bg-opacity-75">
+                <div class="relative rounded-xl shadow-2xl p-0 bg-transparent max-w-lg">
+                    <img id="modal-image" src="" alt="Valid ID"
+                        class="w-auto h-auto max-w-full max-h-80 rounded-lg">
+                    <button onclick="closeImageModal()"
+                        class="absolute -top-9 -right-6 text-gray-500 text-4xl hover:text-red-500 transition cursor-pointer">&times;</button>
+                </div>
+            </div>
+
+            <style>
+                .hidden {
+                    display: none;
+                }
+
+                #image-modal {
+                    transition: opacity 0.3s ease-in-out;
+                    opacity: 0;
+                }
+
+                #image-modal.show {
+                    opacity: 1;
+                }
+
+                #image-modal img {
+                    transition: transform 0.3s ease;
+                }
+
+                #image-modal img:hover {
+                    transform: scale(1.05);
+                }
+            </style>
 
             @php
                 $questions = [
@@ -82,11 +129,11 @@
                 </fieldset>
             @endforeach
 
-            
+
 
             <div class="flex flex-col space-y-4 md:flex-row  md:space-x-4 md:space-y-0">
                 {{-- Add Button --}}
-                <button type="submit" 
+                <button type="submit"
                     class="border-1 hover:border-primary bg-primary hover:bg-white hover:text-primary text-white font-bold py-2 px-4 rounded-lg transition hover:scale-105 hover:opacity-80 duration-300 ease-in-out   ">
                     Save changes
                 </button>
@@ -98,3 +145,34 @@
         </form>
     </div>
 @endsection
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('Script Loaded!');
+
+        // Show Image Modal
+        window.showImageModal = function(imageSrc) {
+            const modal = document.getElementById('image-modal');
+            const modalImage = document.getElementById('modal-image');
+
+            modalImage.src = imageSrc;
+            modal.classList.add('show');
+            modal.classList.remove('hidden');
+        };
+
+        // Close Image Modal
+        window.closeImageModal = function() {
+            const modal = document.getElementById('image-modal');
+            modal.classList.remove('show');
+            modal.classList.add('hidden');
+        };
+
+        // Close Modal on Outside Click
+        document.getElementById('image-modal').addEventListener('click', (event) => {
+            if (event.target.id === 'image-modal') {
+                closeImageModal();
+            }
+        });
+    });
+</script>

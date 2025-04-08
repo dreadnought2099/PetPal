@@ -47,9 +47,12 @@
                 setTimeout(() => {
                     const messageDiv = document.getElementById('message');
                     if (messageDiv) {
-                        messageDiv.style.display = 'none';
+                        messageDiv.classList.add('opacity-0');
+                        setTimeout(() => {
+                            messageDiv.style.display = 'none';
+                        }, 500);
                     }
-                }, 4000);
+                }, 5000);
             </script>
         @endif
     </div>
