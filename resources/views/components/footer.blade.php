@@ -1,8 +1,8 @@
 <footer class="bg-green-100 shadow-sm mt-8">
     <div class="container mx-auto px-4 py-6 md:py-8">
         <div class="text-center">
-            <a href="{{ route('home') }}" class="text-2xl font-semibold text-primary hover-underline-hyperlink">
-                PetPal
+            <a href="{{ route('home') }}" class="flex flex-col text-2xl font-semibold text-primary hover-underline-hyperlink ">
+                PetPal <span class="text-sm">Find.Love.Adopt</span>
             </a>
         </div>
 

@@ -40,7 +40,7 @@
                 </p>
 
                 @if ($pet->status !== 'adopted')
-                    <button onclick="showPetModal({{ $pet->id }})"
+                    <button onclick="event.stopPropagation(); showPetModal({{ $pet->id }})"
                         class="mt-4 text-primary hover-underline-hyperlink cursor-pointer">
                         See more
                     </button>
@@ -82,8 +82,8 @@
                 <button onclick="showPetModal({{ $pet->id }})" title="Click to close the modal"
                     class="flex absolute right-3 text-red-500 text-4xl hover:text-gray-200 hover:cursor-pointer">&times;</button>
 
-                <img src="{{ $pet->pet_profile_path ? Storage::url($pet->pet_profile_path) : asset('images/LRM_20240517_192913-01.jpeg') }}" alt="{{ $pet->name }}"
-                    class="w-full h-48 object-cover rounded-t-xl mb-4">
+                <img src="{{ $pet->pet_profile_path ? Storage::url($pet->pet_profile_path) : asset('images/LRM_20240517_192913-01.jpeg') }}"
+                    alt="{{ $pet->name }}" class="w-full h-48 object-cover rounded-t-xl mb-4">
 
                 <h2 class="text-2xl font-bold text-center mb-4"><span class="text-primary">{{ $pet->name }}</span></h2>
 
@@ -140,27 +140,31 @@
     @endforeach
 
     <script>
-        let selectedId = "";
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Script Loaded!');
+            let selectedId = "";
 
-        function showPetModal(id) {
-            const prevModal = selectedId ? document.getElementById(`modal-${selectedId}`) : null;
-            const currentModal = document.getElementById(`modal-${id}`);
+            window.showPetModal = function(id) {
+                console.log(`showPetModal called with id: ${id}`)
+                const prevModal = selectedId ? document.getElementById(`modal-${selectedId}`) : null;
+                const currentModal = document.getElementById(`modal-${id}`);
 
-            if (selectedId === id.toString()) {
-                selectedId = "";
-                currentModal.style.display = 'none';
-            } else {
-                if (prevModal) prevModal.style.display = 'none';
-                selectedId = id.toString();
-                currentModal.style.display = 'flex';
+                if (selectedId === id.toString()) {
+                    selectedId = "";
+                    currentModal.style.display = 'none';
+                } else {
+                    if (prevModal) prevModal.style.display = 'none';
+                    selectedId = id.toString();
+                    currentModal.style.display = 'flex';
+                }
+            };
+
+            window.outsideClick = function(event, id) {
+                const modal = document.getElementById(`modal-${id}`);
+                if (event.target === modal) {
+                    showPetModal(id);
+                }
             }
-        }
-
-        function outsideClick(event, id) {
-            const modal = document.getElementById(`modal-${id}`);
-            if (event.target === modal) {
-                showPetModal(id);
-            }
-        }
+        })
     </script>
 @endsection

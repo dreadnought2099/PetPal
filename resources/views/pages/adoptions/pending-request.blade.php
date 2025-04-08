@@ -4,8 +4,9 @@
     <div
         class="container mx-auto max-w-4xl bg-white mt-4 border border-primary rounded-lg shadow-md overflow-auto h-[80vh] space-y-10">
         <h1 class="flex gap-1 sticky top-0 py-3 px-4 text-xl font-bold bg-white z-10 justify-center">Pending Adoption <span
-                class="text-primary">Requests</span></h1>
-
+                class="text-primary">Requests</span>
+        </h1>
+        <p class="text-gray-500 flex gap-1 sticky top-0 px-2 z-10">Below are the pending requests for pet adoption</p>
         <!-- Table -->
         <table class="min-w-full table-auto border-collapse">
             <thead class="bg-gray-100">
