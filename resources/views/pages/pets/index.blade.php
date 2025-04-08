@@ -77,28 +77,29 @@
 
     @foreach ($pets as $pet)
         <div id="modal-{{ $pet->id }}" class="modal" onclick="outsideClick(event, {{ $pet->id }})">
-            <div class="bg-white flex relative flex-col
-            rounded-xl w-100">
+            <div class="bg-white flex relative flex-col rounded-xl w-100">
                 <button onclick="showPetModal({{ $pet->id }})" title="Click to close the modal"
-                    class="flex absolute right-3 text-red-500 text-4xl hover:text-gray-200 hover:cursor-pointer">&times;</button>
+                    class="flex absolute right-3 text-red-500 text-4xl hover:text-gray-200 hover:cursor-pointer">
+                    &times;
+                </button>
 
                 <img src="{{ $pet->pet_profile_path ? Storage::url($pet->pet_profile_path) : asset('images/LRM_20240517_192913-01.jpeg') }}"
                     alt="{{ $pet->name }}" class="w-full h-48 object-cover rounded-t-xl mb-4">
 
                 <h2 class="text-2xl font-bold text-center mb-4"><span class="text-primary">{{ $pet->name }}</span></h2>
-
+                
                 <div class="p-2 grid grid-cols-2 gap-4 text-sm">
-                    <p><strong>Breed:</strong> {{ $pet->breed }}</p>
-                    <p><strong>Age:</strong> {{ $pet->age }} years</p>
-                    <p><strong>Sex:</strong> {{ $pet->sex }}</p>
-                    <p><strong>Species:</strong> {{ $pet->getSpeciesTextAttribute() }}</p>
-                    <p><strong>Allergies:</strong> {{ $pet->allergies }}</p>
-                    <p><strong>Vaccination: {{ $pet->getVaccinationTextAttribute() }}</p>
-                    <p><strong>Spayed/Neutered:</strong> {{ $pet->spayed_neutered ? 'Yes' : 'No' }}</p>
+                    <p>Breed: <span class="text-primary">{{ $pet->breed }}</span></p>
+                    <p>Age: <span class="text-primary">{{ $pet->age }} year/s</span></p>
+                    <p>Sex: <span class="text-primary">{{ $pet->sex }}</span></p>
+                    <p>Species: <span class="text-primary">{{ $pet->getSpeciesTextAttribute() }}</span></p>
+                    <p>Allergies: <span class="text-primary">{{ $pet->allergies }}</span></p>
+                    <p>Vaccination: <span class="text-primary">{{ $pet->getVaccinationTextAttribute() }}</span></p>
+                    <p>Spayed/Neutered: <span class="text-primary">{{ $pet->spayed_neutered ? 'Yes' : 'No' }}</span></p>
                 </div>
 
                 <div class="p-2">
-                    <p class="mt-3 font-semibold">Description:</p>
+                    <p class="mt-3">Description:</p>
                     <p class="border p-2 rounded bg-gray-50 text-sm break-words max-h-40 overflow-auto">
                         {{ $pet->description }}
                     </p>
@@ -165,6 +166,6 @@
                     showPetModal(id);
                 }
             }
-        })
+        });
     </script>
 @endsection

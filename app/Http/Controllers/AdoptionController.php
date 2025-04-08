@@ -241,7 +241,6 @@ class AdoptionController extends Controller
     }
 
 
-
     public function create($pet)
     {
         $selectedPet = Pet::find($pet);
@@ -252,10 +251,10 @@ class AdoptionController extends Controller
 
     public function pending()
     {
-        $adoptions = Adoption::with('pet')  // Load pet details for each adoption request
+        $adoptions = Adoption::with('pet', 'user')  // Load pet and user details for each adoption request
             ->where('status', 'pending')
             ->get();
-
+        
         return view('pages.adoptions.pending-request', compact('adoptions'));
     }
 }
