@@ -37,3 +37,5 @@ return new class extends Migration
         Schema::dropIfExists('pets');
     }
 };
+
+// UPDATE pets SET spayed_neutered = 0 WHERE spayed_neutered IS NULL;

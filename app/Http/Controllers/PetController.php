@@ -38,11 +38,12 @@ class PetController extends Controller
                 'sex' => 'required',
                 'species' => 'required|in:' . implode(',', [Pet::SPECIES_DOG, Pet::SPECIES_CAT]),
                 'vaccination' => 'required|in:' . implode(',', [Pet::VACCINATION_NONE, Pet::VACCINATION_PARTIAL, Pet::VACCINATION_FULL]),
-                'spayed_neutered' => 'required',
+                'spayed_neutered' => 'required|boolean',
                 'status' => 'sometimes|in:available,pending,adopted'
             ]);
-
-            // Explicitly cast species and vaccination to integers
+            
+            // Explicitly cast species, vaccination, spayed_neutered to integers
+            $validated['spayed_neutered'] = (bool) $request->input('spayed_neutered');
             $validated['species'] = (int) $validated['species'];
             $validated['vaccination'] = (int) $validated['vaccination'];
         } catch (Exception $e) {
@@ -110,7 +111,7 @@ class PetController extends Controller
             'sex' => 'sometimes|in:M,F',
             'species' => 'sometimes|integer|in:0,1',
             'vaccination' => 'required|integer|in:0,1,2',
-            'spayed_neutered' => 'sometimes|boolean',
+            'spayed_neutered' => 'required|boolean',
         ]);
 
         // Explicitly cast species and vaccination to integers
@@ -119,6 +120,10 @@ class PetController extends Controller
         }
         if (isset($validated['vaccination'])) {
             $validated['vaccination'] = (int) $validated['vaccination'];
+        }
+
+        if (isset($validated['spayed_neutered'])) {
+            $validated['spayed_neutered'] = (bool) $request->input('spayed_neutered');
         }
 
 

@@ -60,7 +60,7 @@
             @foreach ([
             'sex' => ['M' => 'Male', 'F' => 'Female'],
             'species' => ['0' => 'Dog', '1' => 'Cat'],
-            'vaccination' => ['0' => 'None', '1' => 'Partially', '3' => 'Fully'],
+            'vaccination' => [0 => 'None', 1 => 'Partially', 2 => 'Fully'],
         ] as $name => $options)
                 <div class="relative">
                     <select name="{{ $name }}" class="{{ $inputClasses }}" required>

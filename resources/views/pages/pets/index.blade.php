@@ -41,7 +41,7 @@
 
                 @if ($pet->status !== 'adopted')
                     <button onclick="showPetModal({{ $pet->id }})"
-                        class="mt-4 text-primary hover:underline cursor-pointer">
+                        class="mt-4 text-primary hover-underline-hyperlink cursor-pointer">
                         See more
                     </button>
                 @else
@@ -82,7 +82,7 @@
                 <button onclick="showPetModal({{ $pet->id }})" title="Click to close the modal"
                     class="flex absolute right-3 text-red-500 text-4xl hover:text-gray-200 hover:cursor-pointer">&times;</button>
 
-                <img src="{{ Storage::url($pet->pet_profile_path) }}" alt="{{ $pet->name }}"
+                <img src="{{ $pet->pet_profile_path ? Storage::url($pet->pet_profile_path) : asset('images/LRM_20240517_192913-01.jpeg') }}" alt="{{ $pet->name }}"
                     class="w-full h-48 object-cover rounded-t-xl mb-4">
 
                 <h2 class="text-2xl font-bold text-center mb-4"><span class="text-primary">{{ $pet->name }}</span></h2>
@@ -91,23 +91,9 @@
                     <p><strong>Breed:</strong> {{ $pet->breed }}</p>
                     <p><strong>Age:</strong> {{ $pet->age }} years</p>
                     <p><strong>Sex:</strong> {{ $pet->sex }}</p>
-                    <p><strong>Species:</strong> {{ $pet->species === 0 ? 'Cat' : 'Dog' }}</p>
+                    <p><strong>Species:</strong> {{ $pet->getSpeciesTextAttribute() }}</p>
                     <p><strong>Allergies:</strong> {{ $pet->allergies }}</p>
-                    <p><strong>Vaccination:</strong>
-                        @switch($pet->vaccination)
-                            @case(0)
-                                None
-                            @break
-
-                            @case(1)
-                                Partially
-                            @break
-
-                            @case(2)
-                                Fully
-                            @break
-                        @endswitch
-                    </p>
+                    <p><strong>Vaccination: {{ $pet->getVaccinationTextAttribute() }}</p>
                     <p><strong>Spayed/Neutered:</strong> {{ $pet->spayed_neutered ? 'Yes' : 'No' }}</p>
                 </div>
 

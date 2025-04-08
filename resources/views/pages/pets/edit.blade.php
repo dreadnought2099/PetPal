@@ -78,9 +78,11 @@
 
             <div class="mb-4">
                 <label for="spayed_neutered" class="block text-sm font-medium text-gray-700">Spayed/Neutered</label>
-                <input type="checkbox" id="spayed_neutered" name="spayed_neutered"
-                    {{ old('spayed_neutered', $pet->spayed_neutered) ? 'checked' : '' }}
-                    class="mt-1 p-2 border border-gray-300 rounded-md">
+                    <input type="hidden" id="spayed_neutered" name="spayed_neutered"
+                        {{ old('spayed_neutered', $pet->spayed_neutered) ? 'checked' : '' }} value="0">
+                    <input type="checkbox" id="spayed_neutered" name="spayed_neutered"
+                        {{ old('spayed_neutered', $pet->spayed_neutered) ? 'checked' : '' }} value="1"
+                        {{ $pet->spayed_neutered ? 'checked' : '' }} class="mt-1 p-2 border border-gray-300 rounded-md">
             </div>
 
             <div class="mb-4">
