@@ -38,6 +38,7 @@ class AdoptionController extends Controller
                 'contact_number' => 'required|string|max:20',
                 'dob' => 'required|date|before_or_equal:' . now()->subYears(18)->toDateString(),
                 'valid_id' => 'required|file|mimes:jpeg,png,jpg,pdf|max:51200',
+                'valid_id_back' => 'required|file|mimes:jpeg,png,jpg,pdf|max:51200',
                 'previous_experience' => 'required|in:yes,no',
                 'other_pets' => 'required|in:yes,no',
                 'financial_preparedness' => 'required|in:yes,no',
@@ -77,6 +78,14 @@ class AdoptionController extends Controller
                 Log::info('File stored at path', ['path' => $path]);
             }
 
+            if ($request->hasFile('valid_id_back')) {
+                $fileBack = $request->file('valid_id_back');
+                $filenameBack = time() . '-' . Str::slug($fileBack->getClientOriginalName());
+                $pathBack = $fileBack->storeAs('adoption/valid_ids', $filenameBack, 'public');
+                $validated['valid_id_back'] = $pathBack;
+                Log::info('Valid ID Back file stored at path', ['path' => $pathBack]);
+            }
+
             // Create adoption request
             $adoptionRequest = Adoption::create([
                 'user_id' => Auth::id(),
@@ -88,6 +97,7 @@ class AdoptionController extends Controller
                 'contact_number' => $validated['contact_number'],
                 'dob' => $validated['dob'],
                 'valid_id' => $validated['valid_id'],
+                'valid_id_back' => $validated['valid_id_back'],
                 'previous_experience' => $validated['previous_experience'],
                 'other_pets' => $validated['other_pets'],
                 'financial_preparedness' => $validated['financial_preparedness'],
@@ -223,6 +233,7 @@ class AdoptionController extends Controller
             'contact_number' => 'required|string|max:20',
             'dob' => 'required|date|before_or_equal:' . now()->subYears(18)->toDateString(),
             'valid_id' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:51200',
+            'valid_id_back' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:51200',
             'previous_experience' => 'required|in:yes,no',
             'other_pets' => 'required|in:yes,no',
             'financial_preparedness' => 'required|in:yes,no',
@@ -240,6 +251,16 @@ class AdoptionController extends Controller
 
             // Store new file
             $validated['valid_id'] = $request->file('valid_id')->store('adoption/valid_ids', 'public');
+        }
+
+        if ($request->hasFile('valid_id_back')) {
+            // Delete old 'valid_id_back' file if it exists
+            if ($adoption->valid_id_back) {
+                Storage::disk('public')->delete($adoption->valid_id_back);
+            }
+        
+            // Store new 'valid_id_back' file
+            $validated['valid_id_back'] = $request->file('valid_id_back')->store('adoption/valid_ids', 'public');
         }
 
         // Update the adoption record with validated data (except for the valid_id, which is handled separately)

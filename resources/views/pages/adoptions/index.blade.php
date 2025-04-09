@@ -66,6 +66,14 @@
                 <p class="text-red-500 text-xs mt-1">{{ $errors->first('valid_id') }}</p>
             @endif
 
+            <div class="relative bg-inherit">
+                <label class="{{ $labelClasses }}">Upload Back of Valid ID (JPEG, PNG, JPG, PDF)</label>
+                <input type="file" name="valid_id_back" class="{{ $inputClasses }}" accept=".jpeg,.png,.jpg,.pdf" required>
+            </div>
+            @if ($errors->has('valid_id_back'))
+                <p class="text-red-500 text-xs mt-1">{{ $errors->first('valid_id_back') }}</p>
+            @endif
+
 
             @php
                 $questions = [

@@ -72,7 +72,19 @@
                             class="mt-2 w-32 h-32 object-cover rounded-md cursor-pointer"
                             onclick="showImageModal('{{ asset('storage/' . $adoption->valid_id) }}')">
                     @endif
+                </div>
+            </div>
 
+            <div class="mb-4">
+                <div class="relative bg-inherit">
+                    <input type="file" id="valid_id_back" name="valid_id_back" class="{{ $inputClasses }}"
+                        accept=".jpeg,.png,.jpg,.pdf">
+                    <label for="valid_id_back" class="{{ $labelClasses }}">Upload Valid ID (JPEG, PNG, JPG, PDF)</label>
+                    @if ($adoption->valid_id_back)
+                        <img src="{{ asset('storage/' . $adoption->valid_id_back) }}" alt="Valid ID"
+                            class="mt-2 w-32 h-32 object-cover rounded-md cursor-pointer"
+                            onclick="showImageModal('{{ asset('storage/' . $adoption->valid_id_back) }}')">
+                    @endif
                 </div>
             </div>
 

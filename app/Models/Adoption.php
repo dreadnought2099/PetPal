@@ -23,6 +23,7 @@ class Adoption extends Model
         'contact_number', 
         'dob', 
         'valid_id',
+        'valid_id_back',
         'previous_experience', 
         'other_pets', 
         'financial_preparedness', 

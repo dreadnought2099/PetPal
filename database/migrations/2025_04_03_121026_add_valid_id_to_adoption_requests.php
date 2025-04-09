@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('adoption_requests', function (Blueprint $table) {
-            
-            $table->string('valid_id')->after('dob');
+            if (!Schema::hasColumn('adoption_requests', 'valid_id')) {
+                $table->string('valid_id')->nullable();
+            }
+            if (!Schema::hasColumn('adoption_requests', 'valid_id_back')) {
+                $table->string('valid_id_back')->nullable();
+            }
         });
     }
 
@@ -23,8 +27,12 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('adoption_requests', function (Blueprint $table) {
-            
-            $table->dropColumn('valid_id');
+            if (Schema::hasColumn('adoption_requests', 'valid_id')) {
+                $table->dropColumn('valid_id');
+            }
+            if (Schema::hasColumn('adoption_requests', 'valid_id_back')) {
+                $table->dropColumn('valid_id_back');
+            }
         });
     }
 };
