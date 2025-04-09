@@ -142,7 +142,7 @@
             <div class="flex flex-col space-y-4 md:flex-row  md:space-x-4 md:space-y-0">
                 {{-- Add Button --}}
                 <button type="submit"
-                    class="border-1 hover:border-primary bg-primary hover:bg-white hover:text-primary text-white font-bold py-2 px-4 rounded-lg transition hover:scale-105 hover:opacity-80 duration-300 ease-in-out   ">
+                    class="border-1 hover:border-primary bg-primary hover:bg-white hover:text-primary text-white font-bold py-2 px-4 rounded-lg transition hover:scale-105 hover:opacity-80 duration-300 ease-in-out cursor-pointer">
                     Save changes
                 </button>
                 {{-- Back Button --}}

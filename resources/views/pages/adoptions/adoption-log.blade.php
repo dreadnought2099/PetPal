@@ -23,7 +23,7 @@
                         @foreach ($adoptions as $adoption)
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="border p-3 text-sm">{{ $adoption->id }}</td>
-                                <td class="border p-3 text-sm">{{ $adoption->first_name }} {{ $adoption->last_name }}</td>
+                                <td class="border p-3 text-sm">{{ $adoption->first_name }} {{$adoption->middle_name}} {{ $adoption->last_name }}</td>
                                 <td class="border p-3 text-sm">{{ $adoption->pet_id }}</td>
                                 <td
                                     class="border p-3 text-sm

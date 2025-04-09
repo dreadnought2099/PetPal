@@ -14,7 +14,7 @@
             @if ($adoption->status === 'pending')
                 <div class="flex items-center justify-between gap-4 px-4 py-4 border-b border-gray-200 w-full">
                     <p class="text-gray-700">
-                        <span class="text-base text-primary font-medium">{{ $adoption->first_name }} {{ $adoption->last_name }}</span>
+                        <span class="text-base text-primary font-medium">{{ $adoption->first_name }} {{$adoption->middle_name}} {{ $adoption->last_name }}</span>
                         requested an adoption for
                         <span class="text-base text-primary font-medium">{{ $adoption->pet->name }}</span>
                     </p>
@@ -65,13 +65,13 @@
                 </button>
 
                 <h2 class="text-xl mb-4 text-center py-6">Adoption Request <span class="text-primary">Details</span></h2>
-                <p class="text-gray-700">Adopter's Name: <span class="text-primary">{{ $adoption->first_name }} {{ $adoption->last_name }}</span></p>
+                <p class="text-gray-700">Adopter's Name: <span class="text-primary">{{ $adoption->first_name }} {{ $adoption->middle_name}} {{ $adoption->last_name }}</span></p>
                 <p class="text-gray-700">Pet Name: <span class="text-primary">{{ $adoption->pet->name }}</span></p>
                 <p class="text-gray-700">Address: <span class="text-primary">{{ $adoption->address }}</span></p>
                 <p class="text-gray-700">Contact Number: <span class="text-primary">{{ $adoption->contact_number }}</span></p>
                 <p class="text-gray-700">Date of Birth: <span class="text-primary">{{ \Carbon\Carbon::parse($adoption->dob)->format('F d, Y') }}</span></p>
                 <p class="text-gray-700">Previous Pet Experience: <span class="text-primary">{{ ucfirst($adoption->previous_experience) }}</span></p>
-                <p class="text-gray-700">Do you have other pet at home: <span class="text-primary">{{ ucfirst($adoption->other_pets) }}</span></p>
+                <p class="text-gray-700">Other pet at home: <span class="text-primary">{{ ucfirst($adoption->other_pets) }}</span></p>
                 <p class="text-gray-700">Financial Preparedness: <span class="text-primary">{{ ucfirst($adoption->financial_preparedness) }}</span></p>
                 <p class="text-gray-700">
                     Valid ID:
