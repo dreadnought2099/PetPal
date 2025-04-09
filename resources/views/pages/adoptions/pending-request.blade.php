@@ -75,7 +75,7 @@
                 <p class="text-gray-700">Financial Preparedness: <span class="text-primary">{{ ucfirst($adoption->financial_preparedness) }}</span></p>
                 <p class="text-gray-700">
                     Valid ID:
-                    <a href="{{ Storage::url($adoption->valid_id) }}" target="_blank"
+                    <a href="{{ asset('storage/' . $adoption->valid_id) }}" target="_blank"
                         class="text-primary hover-underline-hyperlink hover:scale-110 transition-all ease-in-out duration-300">View</a>
                 </p>
 

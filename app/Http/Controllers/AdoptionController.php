@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class AdoptionController extends Controller
@@ -200,7 +201,7 @@ class AdoptionController extends Controller
     }
 
     public function update(Request $request, Adoption $adoption)
-    {
+    {   
         if (Auth::id() !== $adoption->user_id || $adoption->status !== 'pending') {
             abort(403, 'Unauthorized action.');
         }
@@ -213,10 +214,24 @@ class AdoptionController extends Controller
             'address' => 'required|string',
             'contact_number' => 'required|string|max:20',
             'dob' => 'required|date',
+            'valid_id' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:51200',
             'previous_experience' => 'required|in:yes,no',
             'other_pets' => 'required|in:yes,no',
             'financial_preparedness' => 'required|in:yes,no',
         ]);
+
+        if ($request->hasFile('valid_id')) {
+              // Delete old file if exists
+            if ($adoption->valid_id) {
+                Storage::disk('public')->delete($adoption->valid_id);
+            }
+
+            // Store new file
+            $validated['valid_id'] = $request->file('valid_id')->store('adoption/valid_ids', 'public');
+        }
+
+        // Update the adoption record with validated data (except for the valid_id, which is handled separately)
+        $adoption->update($validated);
 
         DB::transaction(function () use ($adoption, $validated) {
             //  Check if pet_id is being changed
@@ -254,7 +269,7 @@ class AdoptionController extends Controller
         $adoptions = Adoption::with('pet', 'user')  // Load pet and user details for each adoption request
             ->where('status', 'pending')
             ->get();
-        
+
         return view('pages.adoptions.pending-request', compact('adoptions'));
     }
 }

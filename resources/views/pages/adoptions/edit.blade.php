@@ -29,7 +29,7 @@
             @endif
         </div>
 
-        <form action="{{ route('adopt.update', $adoption->id) }}" method="POST" class="space-y-4 p-6 mb-6 rounded-lg">
+        <form action="{{ route('adopt.update', $adoption->id) }}" method="POST" class="space-y-4 p-6 mb-6 rounded-lg" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -58,21 +58,20 @@
                 <div class="relative bg-inherit">
                     <input type="{{ $name == 'dob' ? 'date' : 'text' }}" name="{{ $name }}"
                         value="{{ old($name, $adoption->$name) }}" class="{{ $inputClasses }}"
-                        {{ $name !== 'middle_name' ? 'required' : '' }} placeholder="{{ $label }}"
-                        value="{{ old($name) }}">
+                        {{ $name !== 'middle_name' ? 'required' : '' }} placeholder="{{ $label }}">
                     <label class="{{ $labelClasses }}">{{ $label }}</label>
                 </div>
             @endforeach
-
+                
             <div class="mb-4">
                 <div class="relative bg-inherit">
                     <input type="file" id="valid_id" name="valid_id" class="{{ $inputClasses }}"
-                        accept=".jpeg,.png,.jpg,.pdf" required>
+                        accept=".jpeg,.png,.jpg,.pdf">
                     <label for="valid_id" class="{{ $labelClasses }}">Upload Valid ID (JPEG, PNG, JPG, PDF)</label>
                     @if ($adoption->valid_id)
-                        <img src="{{ Storage::url($adoption->valid_id) }}" alt="Valid ID"
+                        <img src="{{ asset('storage/' . $adoption->valid_id) }}" alt="Valid ID"
                             class="mt-2 w-32 h-32 object-cover rounded-md cursor-pointer"
-                            onclick="showImageModal('{{ Storage::url($adoption->valid_id) }}')">
+                            onclick="showImageModal('{{ asset('storage/' . $adoption->valid_id) }}')">
                     @endif
 
                 </div>
@@ -80,9 +79,9 @@
 
             <div id="image-modal" class="hidden fixed inset-0 flex items-center justify-center z-50 p-6 bg-opacity-75">
                 <div class="relative rounded-xl shadow-2xl p-0 bg-transparent max-w-lg">
-                    <img id="modal-image" src="" alt="Valid ID"
+                    <img id="modal-image" src="{{ asset('storage/' . $adoption->valid_id) }}" alt="Valid ID"
                         class="w-auto h-auto max-w-full max-h-80 rounded-lg">
-                    <button onclick="closeImageModal()"
+                    <button type="button" onclick="closeImageModal()"
                         class="absolute -top-9 -right-6 text-gray-500 text-4xl hover:text-red-500 transition cursor-pointer">&times;</button>
                 </div>
             </div>
@@ -128,8 +127,6 @@
                         No</label>
                 </fieldset>
             @endforeach
-
-
 
             <div class="flex flex-col space-y-4 md:flex-row  md:space-x-4 md:space-y-0">
                 {{-- Add Button --}}

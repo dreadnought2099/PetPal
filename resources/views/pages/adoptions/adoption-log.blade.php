@@ -4,9 +4,6 @@
     <div
         class="container mx-auto max-w-5xl bg-white mt-6 border border-primary rounded-lg shadow-md overflow-y-auto h-[80vh] p-6">
         <div class="relative w-full">
-
-           
-
             <h2 class="flex gap-[5px] sticky top-0 py-3 px-6 text-2xl font-semibold bg-white z-10 justify-center">
                 Adoption <span class="text-primary">Log</span>
             </h2>
