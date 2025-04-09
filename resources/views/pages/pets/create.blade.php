@@ -12,15 +12,6 @@
             class="px-8 pt-6 pb-8 space-y-6">
             @csrf
 
-            {{-- Flash Messages --}}
-            @if (session('success'))
-                <div class="bg-green-500 text-white p-4 rounded">{{ session('success') }}</div>
-            @endif
-
-            @if (session('error'))
-                <div class="bg-red-500 text-white p-4 rounded">{{ session('error') }}</div>
-            @endif
-
             @php
                 $inputClasses =
                     'peer py-3 w-full placeholder-transparent rounded-md text-gray-700 ring-1 px-4 ring-gray-400 focus:ring-2 focus:ring-primary outline-none';

@@ -28,7 +28,7 @@ return new class extends Migration
             $table->enum('financial_preparedness', ['yes', 'no']);
 
             // Status and timestamps
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->enum('status', ['pending', 'approved', 'rejected', 'cancelled', 'archived'])->default('pending');
             $table->timestamps();
             $table->softDeletes(); // Allows restoring deleted adoption requests
             $table->unique(['user_id', 'pet_id']); // Prevents duplicate requests

@@ -11,11 +11,11 @@
             Enter your new password below to reset your account.
         </p>
 
-        @if (session('status'))
+        {{-- @if (session('status'))
             <div class="bg-green-100 border border-green-400 text-green-700 p-3 rounded-md mb-4">
                 {{ session('status') }}
             </div>
-        @endif
+        @endif --}}
 
         <form action="{{ route('password.update') }}" method="POST" class="space-y-4">
             @csrf

@@ -76,7 +76,7 @@
                 <p class="text-gray-700">
                     Valid ID:
                     <a href="{{ asset('storage/' . $adoption->valid_id) }}" target="_blank"
-                        class="text-primary hover-underline-hyperlink hover:scale-110 transition-all ease-in-out duration-300">View</a>
+                        class="text-primary hover-underline-hyperlink hover:scale-125 transition-all ease-in-out duration-300">View</a>
                 </p>
 
                 <div class="flex justify-end gap-4 mt-4">

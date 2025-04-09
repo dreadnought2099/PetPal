@@ -36,11 +36,15 @@ class AdoptionController extends Controller
                 'middle_name' => 'nullable|string|max:255',
                 'address' => 'required|string',
                 'contact_number' => 'required|string|max:20',
-                'dob' => 'required|date',
+                'dob' => 'required|date|before_or_equal:' . now()->subYears(18)->toDateString(),
                 'valid_id' => 'required|file|mimes:jpeg,png,jpg,pdf|max:51200',
                 'previous_experience' => 'required|in:yes,no',
                 'other_pets' => 'required|in:yes,no',
                 'financial_preparedness' => 'required|in:yes,no',
+            ], [
+                'dob.before_or_equal' => 'You must be atleast 18 years old to apply for an adoption.',
+                'dob.required' => 'Date of birth is required.',
+                'dob.date' => 'Please enter a valid date.',
             ]);
 
             // Check pet availability
@@ -53,11 +57,15 @@ class AdoptionController extends Controller
             // Check for existing pending request
             $existingRequest = Adoption::where('user_id', Auth::id())
                 ->where('pet_id', $validated['pet_id'])
-                ->where('status', 'pending')
+                ->latest()
                 ->first();
 
             if ($existingRequest) {
-                return back()->with('error', 'You already have a pending adoption request for this pet.');
+                if (in_array($existingRequest->status, ['pending', 'approved'])) {
+                    return back()->with("error', 'You already have an active adoption request for $pet->name.");
+                }
+
+                $existingRequest->update(['status' => 'archived']);
             }
 
             // File upload
@@ -201,7 +209,7 @@ class AdoptionController extends Controller
     }
 
     public function update(Request $request, Adoption $adoption)
-    {   
+    {
         if (Auth::id() !== $adoption->user_id || $adoption->status !== 'pending') {
             abort(403, 'Unauthorized action.');
         }
@@ -213,15 +221,19 @@ class AdoptionController extends Controller
             'middle_name' => 'nullable|string|max:255',
             'address' => 'required|string',
             'contact_number' => 'required|string|max:20',
-            'dob' => 'required|date',
+            'dob' => 'required|date|before_or_equal:' . now()->subYears(18)->toDateString(),
             'valid_id' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:51200',
             'previous_experience' => 'required|in:yes,no',
             'other_pets' => 'required|in:yes,no',
             'financial_preparedness' => 'required|in:yes,no',
+        ], [
+            'dob.before_or_equal' => 'You must be atleast 18 years old to apply for an adoption.',
+            'dob.required' => 'Date of birth is required.',
+            'dob.date' => 'Please enter a valid date.',
         ]);
 
         if ($request->hasFile('valid_id')) {
-              // Delete old file if exists
+            // Delete old file if exists
             if ($adoption->valid_id) {
                 Storage::disk('public')->delete($adoption->valid_id);
             }

@@ -40,11 +40,20 @@
                 </select>
             </div>
 
+            @php
+                $maxDob = \Carbon\Carbon::now()->subYears(18)->toDateString();
+            @endphp
+
             @foreach (['last_name' => 'Last Name', 'first_name' => 'First Name', 'middle_name' => 'Middle Name', 'address' => 'Address', 'contact_number' => 'Contact Number', 'dob' => 'Date of Birth'] as $name => $label)
                 <div class="relative bg-inherit">
-                    <input type="{{ $name == 'dob' ? 'date' : 'text' }}" name="{{ $name }}"
-                        class="{{ $inputClasses }}" {{ $name !== 'middle_name' ? 'required' : '' }}
-                        placeholder="{{ $label }}" value="{{ old($name) }}">
+                    <input 
+                        type="{{ $name == 'dob' ? 'date' : 'text' }}" 
+                        name="{{ $name }}"
+                        class="{{ $inputClasses }}" 
+                        placeholder="{{ $label }}" 
+                        value="{{ old($name) }}"
+                        {{ $name !== 'middle_name' ? 'required' : '' }}
+                        @if ($name === 'dob') max="{{ $maxDob }}" @endif>
                     <label class="{{ $labelClasses }}">{{ $label }}</label>
                 </div>
             @endforeach

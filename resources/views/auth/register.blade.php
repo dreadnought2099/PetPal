@@ -27,7 +27,6 @@
                         name="{{ $name }}" placeholder="{{ $label }}" value="{{ old($name) }}"
                         class="{{ $inputClasses }}">
                     <label class="{{ $labelClasses }}">{{ $label }}</label>
-                    {{-- Error message with compact spacing --}}
                     <p class="text-secondary text-xs min-h-[14px] mt-1">
                         @error($name)
                             {{ $message }}

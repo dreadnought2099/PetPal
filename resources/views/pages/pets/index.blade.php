@@ -49,18 +49,19 @@
                 @endif
             </div>
         @empty
-            <div class="col-span-4 text-center py-8">
-                <p class="text-lg text-gray-600">No pets available for adoption at this time.</p>
+            <div class="w-full flex flex-col items-center justify-center text-center py-16">
+                <p class="text-lg text-gray-500 mb-4">No pets available for adoption at this time.</p>
+
                 @auth
                     @can('create pet listing')
                         <a href="{{ route('pets.create') }}"
-                            class="mt-4 inline-block bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark transition-colors">
+                            class="inline-block bg-primary text-white px-6 py-2.5 rounded-lg hover:bg-primary-dark transition duration-200 ease-in-out shadow-md">
                             Add a Pet
                         </a>
                     @endcan
                 @endauth
             </div>
-        @endforelse
+        @endempty
     </div>
 
     <style>
@@ -87,7 +88,7 @@
                     alt="{{ $pet->name }}" class="w-full h-48 object-cover rounded-t-xl mb-4">
 
                 <h2 class="text-2xl font-bold text-center mb-4"><span class="text-primary">{{ $pet->name }}</span></h2>
-                
+
                 <div class="p-2 grid grid-cols-2 gap-4 text-sm">
                     <p>Breed: <span class="text-primary">{{ $pet->breed }}</span></p>
                     <p>Age: <span class="text-primary">{{ $pet->age }} year/s</span></p>
@@ -131,7 +132,7 @@
                     @if (auth()->guest() || auth()->user()->hasRole('Adopter'))
                         <a href="{{ route('adopt.apply', $pet->id) }}"
                             class="w-full px-4 py-2 bg-primary text-white text-sm font-semibold rounded-md
-                                hover:bg-white hover:text-primary border hover:border-primary transition duration-300">
+                                    hover:bg-white hover:text-primary border hover:border-primary transition duration-300">
                             Adopt Now
                         </a>
                     @endif

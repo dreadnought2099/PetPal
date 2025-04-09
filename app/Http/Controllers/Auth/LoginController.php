@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\WelcomeMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class LoginController extends Controller
 {
@@ -27,16 +29,13 @@ class LoginController extends Controller
 
         $user = Auth::user();
 
+        Mail::to($user->email)->queue(new WelcomeMail($user));
+
         // success message
         return redirect()->route('pets.index')->with('success', "Login successful! Welcome, {$user->name}.");
     }
 
-    protected function authenticated(Request $request, $user) {
-        if (!$user->hasVerifiedEmail()) {
-            Auth::logout();
-            return redirect()->route('verification.notice')->with('error', 'Verify your email first before logging in.');
-        }
-    }
+  
 
     public function logout(Request $request)
     {

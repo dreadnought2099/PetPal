@@ -3,15 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Mail\WelcomeMail;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;    
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
-use Spatie\Permission\Models\Role;
 
 class RegistrationController extends Controller
 {
@@ -42,15 +38,9 @@ class RegistrationController extends Controller
                 'password' => Hash::make($validated['password']),
             ]);
 
-            // Should send email first before redirecting
-            Mail::to($user->email)->queue(new WelcomeMail($user));
-
-            // Ma login ang user after successfully registering
-            Auth::login($user);
-
             $user->assignRole('Adopter');
 
-            return redirect()->route('pets.index')->with('success', "Registration successful! Welcome, {$user->name}."); 
+            return redirect()->route('login')->with('success', "Registration successful. Please log in."); 
         } catch (\Exception $e) {
 
             Log::error('User registration failed successfully: ' . $e->getMessage());

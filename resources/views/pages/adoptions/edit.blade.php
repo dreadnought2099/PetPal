@@ -16,8 +16,7 @@
             Details
         </h1>
 
-        {{-- Display Validation Errors --}}
-        <div class="min-h-[50px]">
+        {{-- <div class="min-h-[50px]">
             @if ($errors->any())
                 <div class="bg-red-100 text-red-700 p-3">
                     <ul>
@@ -27,7 +26,7 @@
                     </ul>
                 </div>
             @endif
-        </div>
+        </div> --}}
 
         <form action="{{ route('adopt.update', $adoption->id) }}" method="POST" class="space-y-4 p-6 mb-6 rounded-lg" enctype="multipart/form-data">
             @csrf
