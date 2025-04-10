@@ -11,7 +11,6 @@
     <link rel="icon" href="{{ asset('/icon/pawprint.png') }}">
     @vite('resources/css/app.css')
 
-    {{-- Custom Scrollbar Styles --}}
     <style>
         ::-webkit-scrollbar {
             width: 4px;
