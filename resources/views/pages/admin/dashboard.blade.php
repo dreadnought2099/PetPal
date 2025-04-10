@@ -2,13 +2,6 @@
 
 @section('content')
     <div class="container mx-auto p-4">
-        <!-- Display session messages like success or info -->
-        {{-- @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif --}}
-
         <h2 class="text-2xl text-center font-semibold mb-6">Admin <span class="text-primary">Dashboard</span></h2>
 
         <div class="bg-white p-6 rounded-lg shadow-md">
@@ -27,17 +20,19 @@
                 <tbody class="divide-y divide-gray-200 cursor-pointer">
                     @foreach ($users as $user)
                         <tr class="hover:bg-gray-100">
+                            <!-- Display user details -->
                             <td class="py-3 px-4 text-sm text-gray-700">{{ $user->id }}</td>
                             <td class="py-3 px-4 text-sm text-gray-700">{{ $user->name }}</td>
                             <td class="py-3 px-4 text-sm text-gray-700">{{ $user->email }}</td>
                             <td class="py-3 px-4 text-sm text-gray-700">
+                                <!-- Form to handle role change -->
                                 <form id="handleRoleChange-{{ $user->id }}" method="POST"
                                     action="{{ route('admin.changeRole', $user->id) }}">
                                     @csrf
                                     <input type="hidden" name="role" id="role-{{ $user->id }}"
                                         value="{{ $user->roles->first() ? $user->roles->first()->name : '' }}">
                                     <select name="role" class="border rounded px-2 py-1 text-sm cursor-pointer"
-                                        onchange="handleRoleChange(event, {{ $user->id }})">
+                                        onchange="handleRoleChange(event, {{ $user->id }}, '{{ addslashes($user->name) }}')">
                                         @foreach ($roles as $role)
                                             <option value="{{ $role->name }}"
                                                 {{ $user->hasRole($role->name) ? 'selected' : '' }}>
@@ -48,13 +43,13 @@
                                 </form>
                             </td>
                             <td class="py-3 px-4 text-sm text-gray-700">
-                                <!-- Delete Button Trigger -->
-                                <button onclick="confirmDelete({{ $user->id }})" title="Delete User"
+                                <!-- Trigger delete confirmation -->
+                                <button onclick="confirmDelete({{ $user->id }}, '{{ addslashes($user->name) }}')" title="Delete User"
                                     class="hover-underline-hyperlink-secondary hover:text-secondary transition duration-300 cursor-pointer">
                                     <img src="icon/trash-solid.svg" alt="Delete" class="w-5 h-5">
                                 </button>
 
-                                <!-- Delete Form -->
+                                <!-- Hidden delete form -->
                                 <form id="deleteUserForm-{{ $user->id }}" method="POST"
                                     action="{{ route('admin.deleteUser', $user->id) }}" class="hidden">
                                     @csrf
@@ -69,59 +64,80 @@
     </div>
 @endsection
 
-<!-- Modal HTML -->
-<div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white p-6 rounded-lg shadow-xl text-center max-w-sm w-full">
-        <p id="modalMessage" class="mb-4 text-lg font-semibold text-gray-800"></p>
+<!-- Modal to show confirmation messages -->
+<div id="confirmationModal" class="modal fixed inset-0 flex items-center justify-center hidden" data-action="delete" onclick="outsideClickEvent(event)">
+    <div class="modal-content bg-white p-6 rounded-lg shadow-xl text-center max-w-sm w-full" onclick="event.stopPropagation()">
+        <p id="modalMessage" class="mb-4 text-lg text-gray-800"></p>
         <div class="flex space-x-4">
-            <button id="confirmButton"
-                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">Yes</button>
-            <button onclick="closeModal()"
-                class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition duration-300">Cancel</button>
+            <button id="confirmButton" class="bg-primary text-white px-4 py-2 rounded-md hover:bg-white hover:text-primary border-1 border-primary hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer">
+                Yes
+            </button>
+            <button onclick="closeModal()" class="bg-white text-gray-700 px-4 py-2 rounded-md hover:text-primary border-1 hover:border-primary hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer">
+                Cancel
+            </button>
         </div>
     </div>
 </div>
 
+<style>
+    .modal {
+        background-color: rgba(0, 0, 0, 0.4); /* Dim background for modal */
+        z-index: 50; /* Ensure modal is above other content */
+    }
+</style>
+
 <script>
-    let pendingAction = null;
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('Script Loaded');
+        let pendingAction = null;
 
-    function confirmDelete(userId) {
-        pendingAction = () => {
-            document.getElementById(`deleteUserForm-${userId}`).submit();
-        };
-        showModal("Are you sure you want to delete this user?");
-    }
-
-    function handleRoleChange(event, userId) {
-        event.preventDefault(); // Prevent immediate form submission
-
-        const selectedRole = event.target.value;
-
-        // Set the role input value to the selected role
-        document.getElementById(`role-${userId}`).value = selectedRole;
-
-        // Show confirmation modal before submitting
-        pendingAction = () => {
-            document.getElementById(`handleRoleChange-${userId}`).submit(); // Submit the form
+        // Show delete confirmation modal
+        window.confirmDelete = function(userId, userName) {
+            console.log(`Confirm deletion for ID: ${userId}, Name: ${userName}`);
+            pendingAction = () => {
+                document.getElementById(`deleteUserForm-${userId}`).submit();
+            };
+            showModal(`Are you sure you want to delete <span style="color: #49b451;">${userName}</span>?`);
         };
 
-        showModal(`Are you sure you want to change this user's role to "${selectedRole}"?`);
-    }
+        // Show role change confirmation modal
+        window.handleRoleChange = function(event, userId, userName) {
+            event.preventDefault(); // Prevent immediate submission
+            const selectedRole = event.target.value;
+            document.getElementById(`role-${userId}`).value = selectedRole;
+            pendingAction = () => {
+                document.getElementById(`handleRoleChange-${userId}`).submit();
+            };
+            showModal(`Change <span style="color: #49b451;">${userName}'s</span> role to <span style="color: #49b451;">${selectedRole}</span>?`);
+        };
 
-    function showModal(message) {
-        document.getElementById('modalMessage').innerText = message;
-        document.getElementById('confirmationModal').classList.remove('hidden');
-    }
+        // Show modal with dynamic message
+        window.showModal = function(message) {
+            const modalMessage = document.getElementById('modalMessage');
+            modalMessage.innerHTML = message;
+            document.getElementById('confirmationModal').classList.remove('hidden');
+        };
 
-    function closeModal() {
-        document.getElementById('confirmationModal').classList.add('hidden');
-        pendingAction = null;
-    }
+        // Close modal and reset pending action
+        window.closeModal = function() {
+            document.getElementById('confirmationModal').classList.add('hidden');
+            pendingAction = null;
+        };
 
-    document.getElementById('confirmButton').addEventListener('click', () => {
-        if (pendingAction) {
-            pendingAction();
-        }
-        closeModal();
+        // Execute pending action when confirming
+        document.getElementById('confirmButton').addEventListener('click', () => {
+            if (pendingAction) {
+                pendingAction();
+            }
+            closeModal();
+        });
+
+        // Handle clicks outside the modal content
+        window.outsideClickEvent = function(event) {
+            const modal = document.getElementById('confirmationModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
     });
 </script>

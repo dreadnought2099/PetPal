@@ -97,11 +97,11 @@
 
             <div class="flex space-x-4">
                 <button type="submit"
-                    class="border border-primary bg-primary text-white font-bold py-2 px-4 rounded-lg transition hover:scale-105 hover:bg-white hover:text-primary hover:border-primary duration-300 cursor-pointer">
+                    class="border border-primary bg-primary text-white font-bold py-2 px-4 rounded-lg transition-all hover:scale-105 hover:bg-white hover:text-primary hover:border-primary duration-300 cursor-pointer">
                     Update
                 </button>
                 <a href="{{ url()->previous() }}"
-                    class="border border-dark hover:border-primary bg-white text-dark font-bold py-2 px-4 rounded-lg transition hover:scale-105 hover:text-primary duration-300">
+                    class="border border-dark hover:border-primary bg-white text-dark font-bold py-2 px-4 rounded-lg transition-all hover:scale-105 hover:text-primary duration-300">
                     Cancel
                 </a>
             </div>

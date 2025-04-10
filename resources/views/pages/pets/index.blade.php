@@ -109,7 +109,7 @@
                 <div class="flex justify-between p-2 w-full">
                     @can('edit pet listing')
                         <a href="{{ route('pets.edit', $pet->id) }}"
-                            class="bg-primary text-white px-4 py-2 rounded hover:bg-white hover:text-primary border border-primary transition-colors">
+                            class="bg-primary text-white px-4 py-2 rounded hover:bg-white hover:text-primary hover:scale-105 border border-primary transition-all">
                             Edit
                         </a>
                     @endcan
@@ -120,7 +120,7 @@
                         @method('DELETE')
                         @can('delete pet listing')
                             <button type="submit"
-                                class="bg-red-500 text-white px-4 py-2 rounded hover:bg-white border hover:border-secondary hover:text-secondary transition-colors cursor-pointer">
+                                class="bg-red-500 text-white px-4 py-2 rounded hover:bg-white border hover:border-secondary hover:text-secondary hover:scale-105 transition-all cursor-pointer">
                                 Delete
                             </button>
                         @endcan

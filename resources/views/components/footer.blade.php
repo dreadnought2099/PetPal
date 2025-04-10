@@ -22,14 +22,14 @@
                 <ul class="space-y-2">
                     <li><a href="https://www.facebook.com/RMAGALLANEZ.18" target="_blank"
                             class="flex items-center space-x-2 text-gray-700 hover:text-primary hover:scale-105 transition-all duration-300">
-                            <img src="icon/facebook.svg" class="w-6 h-6" alt="Facebook">
+                            <img src="/icon/facebook.svg" class="w-6 h-6" alt="Facebook">
                             <span class="hover-underline-hyperlink">Facebook</span>
                         </a>
                     </li>
 
                     <li><a href="https://www.instagram.com/skerm_art/" target="_blank"
                             class="flex items-center space-x-2 text-gray-700 hover:text-primary hover:scale-105 transition-all duration-300">
-                            <img src="icon/instagram.svg" class="w-6 h-6" alt="Instagram">
+                            <img src="/icon/instagram.svg" class="w-6 h-6" alt="Instagram">
                             <span class="hover-underline-hyperlink">Instagram</span>
                         </a>
                     </li>

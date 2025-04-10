@@ -16,18 +16,6 @@
             Details
         </h1>
 
-        {{-- <div class="min-h-[50px]">
-            @if ($errors->any())
-                <div class="bg-red-100 text-red-700 p-3">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-        </div> --}}
-
         <form action="{{ route('adopt.update', $adoption->id) }}" method="POST" class="space-y-4 p-6 mb-6 rounded-lg" enctype="multipart/form-data">
             @csrf
             @method('PUT')
