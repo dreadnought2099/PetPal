@@ -26,7 +26,7 @@
             @endif
         @empty
             <div class="text-center py-6">
-                <p colspan="5" class="px-6 py-3 border-b text-center">No pending adoption requests</p>
+                <p colspan="5" class="px-6 py-3 text-gray-700 text-center">No pending adoption requests at the moment...</p>
             </div>
         @endforelse
     </div>

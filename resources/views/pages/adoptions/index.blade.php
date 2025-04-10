@@ -46,15 +46,14 @@
 
             @foreach (['last_name' => 'Last Name', 'first_name' => 'First Name', 'middle_name' => 'Middle Name', 'address' => 'Address', 'contact_number' => 'Contact Number', 'dob' => 'Date of Birth'] as $name => $label)
                 <div class="relative bg-inherit">
-                    <input 
-                        type="{{ $name == 'dob' ? 'date' : 'text' }}" 
-                        name="{{ $name }}"
-                        class="{{ $inputClasses }}" 
-                        placeholder="{{ $label }}" 
-                        value="{{ old($name) }}"
+                    <input type="{{ $name == 'dob' ? 'date' : 'text' }}" name="{{ $name }}"
+                        class="{{ $inputClasses }}" placeholder="{{ $label }}" value="{{ old($name) }}"
                         {{ $name !== 'middle_name' ? 'required' : '' }}
                         @if ($name === 'dob') max="{{ $maxDob }}" @endif>
                     <label class="{{ $labelClasses }}">{{ $label }}</label>
+                    @if ($errors->has($name))
+                        <span class="text-red-500">{{ $errors->first($name) }}</span>
+                    @endif
                 </div>
             @endforeach
 
@@ -68,7 +67,8 @@
 
             <div class="relative bg-inherit">
                 <label class="{{ $labelClasses }}">Upload Back of Valid ID (JPEG, PNG, JPG, PDF)</label>
-                <input type="file" name="valid_id_back" class="{{ $inputClasses }}" accept=".jpeg,.png,.jpg,.pdf" required>
+                <input type="file" name="valid_id_back" class="{{ $inputClasses }}" accept=".jpeg,.png,.jpg,.pdf"
+                    required>
             </div>
             @if ($errors->has('valid_id_back'))
                 <p class="text-red-500 text-xs mt-1">{{ $errors->first('valid_id_back') }}</p>

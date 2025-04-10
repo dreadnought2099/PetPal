@@ -29,6 +29,7 @@ class AdoptionController extends Controller
         Log::info('Adoption Request Data:', $request->all());
 
         try {
+            // Validation
             $validated = $request->validate([
                 'pet_id' => 'required|exists:pets,id',
                 'last_name' => 'required|string|max:255',
@@ -43,7 +44,7 @@ class AdoptionController extends Controller
                 'other_pets' => 'required|in:yes,no',
                 'financial_preparedness' => 'required|in:yes,no',
             ], [
-                'dob.before_or_equal' => 'You must be atleast 18 years old to apply for an adoption.',
+                'dob.before_or_equal' => 'You must be at least 18 years old to apply for an adoption.',
                 'dob.required' => 'Date of birth is required.',
                 'dob.date' => 'Please enter a valid date.',
             ]);
@@ -55,21 +56,28 @@ class AdoptionController extends Controller
                 return back()->with('error', 'This pet is not available for adoption.');
             }
 
-            // Check for existing pending request
+            // Check for existing active adoption requests
+            $hasActiveRequest = Adoption::where('user_id', Auth::id())
+                ->where('pet_id', $validated['pet_id'])
+                ->whereIn('status', ['pending', 'approved'])
+                ->exists();
+
+            if ($hasActiveRequest) {
+                return back()->with('error', "You already have an active adoption request for {$pet->name}. Please wait for a response.");
+            }
+
+            // Check for rejected or archived requests
             $existingRequest = Adoption::where('user_id', Auth::id())
                 ->where('pet_id', $validated['pet_id'])
-                ->latest()
+                ->whereIn('status', ['rejected', 'archived'])
                 ->first();
 
             if ($existingRequest) {
-                if (in_array($existingRequest->status, ['pending', 'approved'])) {
-                    return back()->with("error', 'You already have an active adoption request for $pet->name.");
-                }
-
+                // Archive the old rejected request to keep history clean
                 $existingRequest->update(['status' => 'archived']);
             }
 
-            // File upload
+            // File upload for valid_id
             if ($request->hasFile('valid_id')) {
                 $file = $request->file('valid_id');
                 $filename = time() . '-' . Str::slug($file->getClientOriginalName());
@@ -78,6 +86,7 @@ class AdoptionController extends Controller
                 Log::info('File stored at path', ['path' => $path]);
             }
 
+            // File upload for valid_id_back
             if ($request->hasFile('valid_id_back')) {
                 $fileBack = $request->file('valid_id_back');
                 $filenameBack = time() . '-' . Str::slug($fileBack->getClientOriginalName());
@@ -86,25 +95,32 @@ class AdoptionController extends Controller
                 Log::info('Valid ID Back file stored at path', ['path' => $pathBack]);
             }
 
-            // Create adoption request
-            $adoptionRequest = Adoption::create([
-                'user_id' => Auth::id(),
-                'pet_id' => $validated['pet_id'],
-                'last_name' => $validated['last_name'],
-                'first_name' => $validated['first_name'],
-                'middle_name' => $validated['middle_name'],
-                'address' => $validated['address'],
-                'contact_number' => $validated['contact_number'],
-                'dob' => $validated['dob'],
-                'valid_id' => $validated['valid_id'],
-                'valid_id_back' => $validated['valid_id_back'],
-                'previous_experience' => $validated['previous_experience'],
-                'other_pets' => $validated['other_pets'],
-                'financial_preparedness' => $validated['financial_preparedness'],
-                'status' => 'pending',
-            ]);
+            // Create adoption request with duplicate entry handling
+            try {
+                $adoptionRequest = Adoption::create([
+                    'user_id' => Auth::id(),
+                    'pet_id' => $validated['pet_id'],
+                    'last_name' => $validated['last_name'],
+                    'first_name' => $validated['first_name'],
+                    'middle_name' => $validated['middle_name'],
+                    'address' => $validated['address'],
+                    'contact_number' => $validated['contact_number'],
+                    'dob' => $validated['dob'],
+                    'valid_id' => $validated['valid_id'],
+                    'valid_id_back' => $validated['valid_id_back'],
+                    'previous_experience' => $validated['previous_experience'],
+                    'other_pets' => $validated['other_pets'],
+                    'financial_preparedness' => $validated['financial_preparedness'],
+                    'status' => 'pending',
+                ]);
+            } catch (\Illuminate\Database\QueryException $e) {
+                if ($e->errorInfo[1] == 1062) { // Duplicate entry error code
+                    return back()->with('error', 'You have already submitted a request for this pet.');
+                }
+                throw $e; // Re-throw the exception for other errors
+            }
 
-            // Update pet status to pending (not adopted yet!)
+            // Update pet status to pending
             $pet->update(['status' => Pet::STATUS_PENDING]);
 
             return redirect()->route('adopt.log')->with('success', "Adoption request submitted successfully!");
@@ -113,6 +129,7 @@ class AdoptionController extends Controller
             return back()->with('error', 'Failed to submit adoption request: ' . $e->getMessage());
         }
     }
+
 
     public function approve(Adoption $adoption)
     {
@@ -258,7 +275,7 @@ class AdoptionController extends Controller
             if ($adoption->valid_id_back) {
                 Storage::disk('public')->delete($adoption->valid_id_back);
             }
-        
+
             // Store new 'valid_id_back' file
             $validated['valid_id_back'] = $request->file('valid_id_back')->store('adoption/valid_ids', 'public');
         }
