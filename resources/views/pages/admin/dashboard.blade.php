@@ -45,7 +45,7 @@
                             <td class="py-3 px-4 text-sm text-gray-700">
                                 <!-- Trigger delete confirmation -->
                                 <button onclick="confirmDelete({{ $user->id }}, '{{ addslashes($user->name) }}')" title="Delete User"
-                                    class="hover-underline-hyperlink-secondary hover:text-secondary transition duration-300 cursor-pointer">
+                                    class="transition-all hover:scale-150 duration-300 cursor-pointer">
                                     <img src="icon/trash-solid.svg" alt="Delete" class="w-5 h-5">
                                 </button>
 
@@ -64,7 +64,6 @@
     </div>
 @endsection
 
-<!-- Modal to show confirmation messages -->
 <div id="confirmationModal" class="modal fixed inset-0 flex items-center justify-center hidden" data-action="delete" onclick="outsideClickEvent(event)">
     <div class="modal-content bg-white p-6 rounded-lg shadow-xl text-center max-w-sm w-full" onclick="event.stopPropagation()">
         <p id="modalMessage" class="mb-4 text-lg text-gray-800"></p>
@@ -81,8 +80,8 @@
 
 <style>
     .modal {
-        background-color: rgba(0, 0, 0, 0.4); /* Dim background for modal */
-        z-index: 50; /* Ensure modal is above other content */
+        background-color: rgba(0, 0, 0, 0.4); 
+        z-index: 50;
     }
 </style>
 

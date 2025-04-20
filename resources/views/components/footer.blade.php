@@ -38,7 +38,7 @@
         </div>
 
         <div class="border-t border-gray-200 mt-10 pt-6 text-center">
-            <a href="{{ route('login') }}" class="text-sm text-gray-500">
+            <a href="{{ route('home') }}" class="text-sm text-gray-500">
                 &copy; <span id="year"></span> <span class="hover-underline-hyperlink cursor-pointer"> PetPal.</span> All Rights Reserved.
             </a>
         </div>
