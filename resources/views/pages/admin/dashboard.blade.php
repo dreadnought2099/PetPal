@@ -4,7 +4,7 @@
     <div class="container mx-auto p-4">
         <h2 class="text-2xl text-center font-semibold mb-6">Admin <span class="text-primary">Dashboard</span></h2>
 
-        <div class="bg-white p-6 rounded-lg shadow-md">
+        <div class="bg-white p-6 rounded-lg shadow-md border-1 border-primary">
             <h2 class="text-xl font-semibold mb-4">Manage <span class="text-primary">Users</span></h2>
 
             <table class="min-w-full table-auto bg-white border-collapse">
