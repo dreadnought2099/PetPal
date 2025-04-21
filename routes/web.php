@@ -18,11 +18,11 @@ Route::get('/', function () {
     return view('pages.home');
 })->name('home');
 
-Route::get('/about', function() {
+Route::get('/about', function () {
     return view('pages.about');
 })->name('about');
 
-Route::get('/contact', function() {
+Route::get('/contact', function () {
     return view('pages.contact');
 })->name('contact');
 
@@ -72,7 +72,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Administrator
     Route::middleware(['role:Administrator'])->group(function () {
-        Route::get('admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('admin/users', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
         // User Management
         Route::delete('/admin/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');

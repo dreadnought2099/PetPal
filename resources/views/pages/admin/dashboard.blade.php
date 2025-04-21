@@ -44,9 +44,9 @@
                             </td>
                             <td class="py-3 px-4 text-sm text-gray-700">
                                 <!-- Trigger delete confirmation -->
-                                <button onclick="confirmDelete({{ $user->id }}, '{{ addslashes($user->name) }}')" title="Delete User"
-                                    class="transition-all hover:scale-150 duration-300 cursor-pointer">
-                                    <img src="icon/trash-solid.svg" alt="Delete" class="w-5 h-5">
+                                <button onclick="confirmDelete({{ $user->id }}, '{{ addslashes($user->name) }}')"
+                                    title="Delete User" class="transition-all hover:scale-150 duration-300 cursor-pointer">
+                                    <img src="/icon/trash-solid.svg" alt="Delete" class="w-5 h-5">
                                 </button>
 
                                 <!-- Hidden delete form -->
@@ -64,14 +64,18 @@
     </div>
 @endsection
 
-<div id="confirmationModal" class="modal fixed inset-0 flex items-center justify-center hidden" data-action="delete" onclick="outsideClickEvent(event)">
-    <div class="modal-content bg-white p-6 rounded-lg shadow-xl text-center max-w-sm w-full" onclick="event.stopPropagation()">
+<div id="confirmationModal" class="modal fixed inset-0 flex items-center justify-center hidden" data-action="delete"
+    onclick="outsideClickEvent(event)">
+    <div class="modal-content bg-white p-6 rounded-lg shadow-xl text-center max-w-sm w-full"
+        onclick="event.stopPropagation()">
         <p id="modalMessage" class="mb-4 text-lg text-gray-800"></p>
         <div class="flex space-x-4">
-            <button id="confirmButton" class="bg-primary text-white px-4 py-2 rounded-md hover:bg-white hover:text-primary border-1 border-primary hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer">
+            <button id="confirmButton"
+                class="bg-primary text-white px-4 py-2 rounded-md hover:bg-white hover:text-primary border-1 border-primary hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer">
                 Yes
             </button>
-            <button onclick="closeModal()" class="bg-white text-gray-700 px-4 py-2 rounded-md hover:text-primary border-1 hover:border-primary hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer">
+            <button onclick="closeModal()"
+                class="bg-white text-gray-700 px-4 py-2 rounded-md hover:text-primary border-1 hover:border-primary hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer">
                 Cancel
             </button>
         </div>
@@ -80,7 +84,7 @@
 
 <style>
     .modal {
-        background-color: rgba(0, 0, 0, 0.4); 
+        background-color: rgba(0, 0, 0, 0.4);
         z-index: 50;
     }
 </style>
@@ -107,7 +111,9 @@
             pendingAction = () => {
                 document.getElementById(`handleRoleChange-${userId}`).submit();
             };
-            showModal(`Change <span style="color: #49b451;">${userName}'s</span> role to <span style="color: #49b451;">${selectedRole}</span>?`);
+            showModal(
+                `Change <span style="color: #49b451;">${userName}'s</span> role to <span style="color: #49b451;">${selectedRole}</span>?`
+            );
         };
 
         // Show modal with dynamic message

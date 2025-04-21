@@ -8,7 +8,10 @@
 
     <title>PetPal</title>
 
-    <link rel="icon" href="{{ asset('icon/pawprint.png') }}" type="image/png">
+    {{-- <link rel="icon" href="{{ asset('icon/pawprint.png') }}" type="image/png">
+    <link rel="shortcut icon" href="{{ asset('icon/pawprint.png') }}" type="image/x-icon"> --}}
+    <link rel="icon" href="{{ asset('icon/pawprint.png') }}?v={{ time() }}" type="image/png">
+
     @vite('resources/css/app.css')
 
     <style>
