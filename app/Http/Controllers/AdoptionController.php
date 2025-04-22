@@ -80,7 +80,14 @@ class AdoptionController extends Controller
             // File upload for valid_id
             if ($request->hasFile('valid_id')) {
                 $file = $request->file('valid_id');
-                $filename = time() . '-' . Str::slug($file->getClientOriginalName());
+
+                // Get the file's original extension
+                $extension = $file->getClientOriginalExtension();
+
+                // Create the filename with time prefix and the original file extension
+                $filename = time() . '-' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $extension;
+
+                // Store the file
                 $path = $file->storeAs('adoption/valid_ids', $filename, 'public');
                 $validated['valid_id'] = $path;
                 Log::info('File stored at path', ['path' => $path]);
@@ -89,7 +96,13 @@ class AdoptionController extends Controller
             // File upload for valid_id_back
             if ($request->hasFile('valid_id_back')) {
                 $fileBack = $request->file('valid_id_back');
-                $filenameBack = time() . '-' . Str::slug($fileBack->getClientOriginalName());
+
+                // Get the file original extension
+                $extensionBack = $fileBack->getClientOriginalExtension();
+
+                // Create the filename with time prefix and the original file extension
+                $filenameBack = time() . '-' . Str::slug(pathinfo($fileBack->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $extensionBack;
+
                 $pathBack = $fileBack->storeAs('adoption/valid_ids', $filenameBack, 'public');
                 $validated['valid_id_back'] = $pathBack;
                 Log::info('Valid ID Back file stored at path', ['path' => $pathBack]);
