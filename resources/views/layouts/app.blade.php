@@ -33,7 +33,7 @@
 </head>
 
 <body class="flex flex-col min-h-screen bg-white">
-    <div id="success-message-container" class="absolute top-24 right-4 z-10">
+    <div id="success-message-container" class="absolute top-24 right-4 z-100">
         @if (session('success') || session('error') || session('info') || $errors->any())
             <div id="message"
                 class="p-3 rounded-md shadow-lg border-l-4
