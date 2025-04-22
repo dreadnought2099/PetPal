@@ -90,6 +90,17 @@
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
     </script>
+
+    <script src="{{ asset('js/htmx.min.js') }}"></script>
+
+    {{-- HTMX CSRF Token Header --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.addEventListener('htmx:configRequest', function(event) {
+                event.detail.headers['X-CSRF-TOKEN'] = '{{ csrf_token() }}';
+            });
+        });
+    </script>
 </body>
 
 </html>
