@@ -1,12 +1,12 @@
 <nav class="bg-primary flex justify-between items-center px-8 py-4 text-white">
     <div>
-        <a href="{{ url('/') }}" class="flex flex-col text-3xl text-white hover-underline">
+        <a href="{{ route('home') }}" class="flex flex-col text-3xl text-white hover-underline">
             PetPal <span class="text-sm">Find.Love.Adopt</span>
         </a>
     </div>
 
     <div class="flex items-center space-x-6 text-lg font-bold">
-        <a href="{{ url('/') }}" class="hover-underline">Home</a>
+        <a href="{{ route('home') }}" class="hover-underline">Home</a>
         <a href="{{ route('pets.index') }}" class="hover-underline">Our Pets</a>
         @if (auth()->check() && auth()->user()->hasRole('Shelter|Administrator'))
             <a href="{{ route('pets.create') }}" class="hover-underline">Add Pet</a>
