@@ -10,26 +10,7 @@
 
     <link rel="icon" href="{{ asset('icon/pawprint.png') }}" type="image/png">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
-    @vite('resources/css/app.css')
-
-    <style>
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-    </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="flex flex-col min-h-screen bg-white">
